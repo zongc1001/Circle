@@ -4,13 +4,35 @@
     "description": "Build an Extension!",
     "manifest_version": 2,
     "browser_action": {
-        "default_popup": "popup.html"
+        "default_popup": "popup.html",
+        "default_icons": {
+            "16": "./asset/img/get_started16.png",
+            "32": "./asset/img/get_started32.png",
+            "48": "./asset/img/get_started48.png",
+            "128": "./asset/img/get_started128.png"
+        }
     },
-    "permissions": ["storage"],
+    "options_page": "options.html",
+
+    "icons": {
+        "16": "./asset/img/get_started16.png",
+        "32": "./asset/img/get_started32.png",
+        "48": "./asset/img/get_started48.png",
+        "128": "./asset/img/get_started128.png"
+    },
+    "permissions": [
+        "activeTab",
+        "declarativeContent",
+        "storage",
+        "browserAction",
+        "http://*.bilibili.com/*",
+        "https://*.bilibili.com/*"
+    ],
     "background": {
-        "scripts": ["background.js"],
-        "persistent": false
+        "scripts": ["./dist/background.js"],
+        "persistent": true
     },
+   
     "commands": {
         "_execute_browser_action": {
             "suggested_key": {
@@ -19,5 +41,9 @@
             },
             "description": "Opens hello.html"
         }
-    }
+    },
+    "web_accessible_resources": [
+        "popup.js",
+        "dist/background.js"
+    ]
 }

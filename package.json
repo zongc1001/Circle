@@ -1,0 +1,23 @@
+{
+  "name": "Circle",
+  "version": "1.0.0",
+  "description": "同步两个浏览器的视频播放行为",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zongc1001/Circle.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zongc1001/Circle/issues"
+  },
+  "homepage": "https://github.com/zongc1001/Circle#readme",
+  "devDependencies": {
+    "peerjs": "^1.3.1"
+  }
+}

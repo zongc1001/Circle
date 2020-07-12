@@ -1,5 +1,39 @@
-<html>
-    <body>
-      <h1>Hello Extensions</h1>
-    </body>
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <!-- <div>
+        <button id="changeColor"></button>
+    </div> -->
+    <table>
+        <tr>
+            <td>Your Id</td>
+            <td><span>null</span>
+            </td>
+        </tr>
+        <tr>
+            <td>Peer's Id</td>
+            <td><input type="text" size="16"></td>
+        </tr>
+        <tr>
+            <td> Status:</td>
+            <td><span class="status"> disconnect </span><br></td>
+        </tr>
+    </table>
+
+    <input type="button" value="Connect">
+
+    <div class="tip">Right click the extention icon and click the options to set your id and your peer's id in</div>
+
+    <script src="popup.js"></script>
+</body>
+
 </html>
