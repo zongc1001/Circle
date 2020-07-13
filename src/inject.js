@@ -1,21 +1,97 @@
 (function () {
+    if (data("inject")) return;
+    data("inject", true);
     function loadScript(url, callback) {
-        
-        let script = document.createElement("script");
-        script.type = "text/javascript";
-        script.charset = "utf-8";
-        script.addEventListener("load", callback, false);
-        
-        script.src = url;
-        document.getElementsByTagName("head")[0].appendChild(script);
+        function doCallback() {
+            if (typeof callback === 'function') {
+                callback();
+            }
+        }
+
+        var elem = document.createElement('script');
+        elem.type = 'text/javascript';
+        elem.charset = 'utf-8';
+        if (elem.addEventListener) {
+            elem.addEventListener('load', doCallback, false);
+        } else {
+            // IE
+            elem.attachEvent('onreadystatechange', doCallback);
+        }
+        elem.src = url;
+        document.getElementsByTagName('head')[0].appendChild(elem);
     }
 
-    function getFullUrl(url) {
-        return chrome.runtime.getUrl(url);
+    function loadStyle(url) {
+        var elem = document.createElement('link');
+        elem.rel = 'stylesheet';
+        elem.type = 'text/css';
+        elem.href = url;
+        document.getElementsByTagName('head')[0].appendChild(elem);
     }
 
-    
+    function url(file) {
+        return chrome.extension.getURL(file);
+    }
+
+    function data(key, value) {
+        var dataset = document.body.dataset;
+        if (arguments.length === 0) {
+            return dataset;
+        } else if (arguments.length === 2) {
+            dataset[key] = value;
+        }
+        return dataset[key];
+    }
+
+    let circleOptions = {
+        server: '',
+        key: '',
+        autoActivate: true
+    };
+
+    let storage = chrome.storage.sync || chrome.storage.local;
+    storage.get(circleOptions, options => {
+        circleOptions = Object.assign(circleOptions, options);
+        data('coplayOptions', JSON.stringify(circleOptions));
+        if (data('circle')) {
+            return;
+        } else {
+            data('circle', true);
+            console.log("load circle.js");
+            loadScript(url('circle.js'));
+        }
+    });
+
+
+    let video = document.getElementsByTagName("video")[0];
+    console.log(video);
+    if (video) {
+        let actionArr = [
+            "play",
+            "pause",
+            "ontimeupdate",
+            "onvolumechange",
+            "onreadystatechange"
+        ]
+        actionArr.forEach(x => {
+            video.addEventListener(x, function (e) {
+                console.log(e);
+                // console.log(chrome.runtime.sendMessage);
+                chrome.runtime.sendMessage(
+                    {
+                        greeting: '这里是inject.js',
+                        from: "player",
+                        action: x
+                    },
+                    (response) => {
+                        console.log(response);
+                    }
+                )
+            })
+        })
+
+    }
 
 
 
-});
+})();

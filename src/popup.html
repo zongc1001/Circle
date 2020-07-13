@@ -16,20 +16,30 @@
     <table>
         <tr>
             <td>Your Id</td>
-            <td><span>null</span>
-            </td>
+            <td><input id="myId" type="text" size="16"></td>
         </tr>
         <tr>
             <td>Peer's Id</td>
-            <td><input type="text" size="16"></td>
+            <td><input id="peerId" type="text" size="16"></td>
         </tr>
         <tr>
-            <td> Status:</td>
-            <td><span class="status"> disconnect </span><br></td>
+            <td>Server</td>
+            <td><input id="server" type="text" size="16"></td>
         </tr>
+        
+        <tr>
+            <td>key</td>
+            <td><input id="key" type="text" size="16"></td>
+        </tr>
+        
+        <tr>
+            <td> Status:</td>
+            <td><span id="status"> disconnect </span><br></td>
+        </tr>
+
     </table>
 
-    <input type="button" value="Connect">
+    <input id="connetcBtn" type="button" value="Connect">
 
     <div class="tip">Right click the extention icon and click the options to set your id and your peer's id in</div>
 

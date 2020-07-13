@@ -1,15 +1,52 @@
-let page = document.getElementById('buttonDiv');
-const kButtonColors = ['#3aa757', '#e8453c', '#f9bb2d', '#4688f1'];
-function constructOptions(kButtonColors) {
-  for (let item of kButtonColors) {
-    let button = document.createElement('button');
-    button.style.backgroundColor = item;
-    button.addEventListener('click', function() {
-      chrome.storage.sync.set({color: item}, function() {
-        console.log('color is ' + item);
-      })
-    });
-    page.appendChild(button);
-  }
+let storage = chrome.storage.sync || chrome.storage.local;
+let server = get('server');
+let key = get('key');
+let autoActivate = get('auto-activate');
+
+function get(id) {
+  return document.getElementById(id) || id;
 }
-constructOptions(kButtonColors);
+
+function on(elem, type, listener) {
+  get(elem).addEventListener(type, listener, false);
+}
+
+function restore() {
+  storage.get(
+    {
+      server: '',
+      key: '',
+      autoActivate: false
+    },
+    item => {
+      server.value = item.server;
+      key.value = item.key;
+      autoActivate.checked = item.autoActivate;
+    }
+  );
+}
+
+function save() {
+  storage.set(
+    {
+      server: server.value,
+      key: key.value,
+      autoActivate: autoActivate.checked
+    },
+    () => {
+      chrome.runtime.sendMessage({ event: 'optionschange' }, response => {
+        if (response.success) {
+          window.close();
+        }
+      });
+    }
+  );
+}
+
+function cancel() {
+  window.close();
+}
+
+on('save', 'click', save);
+on('cancel', 'click', cancel);
+restore();

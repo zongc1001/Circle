@@ -1,6 +1,8 @@
 import Peer from "peerjs"
 let storage = chrome.storage.sync || chrome.storage.local;
-let peer = new Peer('zc', {
+let peer;
+
+peer = new Peer('zc', {
     host: 'zongchen.xyz',
     port: 9000,
     path: '/',
@@ -45,35 +47,81 @@ let peer = new Peer('zc', {
         }
     ]
 })
+
+
 peer.on("open", id => {
     console.log("connected, Id: " + id);
+    chrome.browserAction.setBadgeText({ text: 'ON' });
+    chrome.browserAction.setBadgeBackgroundColor({ color: [30, 255, 30, 255] });
     storage.set({
         myId: id
     }, () => {
         console.log("got id: " + id);
     });
 })
-chrome.browserAction.setBadgeText({text: 'new'});
-chrome.browserAction.setBadgeBackgroundColor({color: [255, 0, 0, 255]});
 
+function inject() {
 
-chrome.runtime.onInstalled.addListener(function () {
-    chrome.storage.sync.set({ color: '#3aa757' }, function () {
-        console.log("The color is green.");
+    if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError.message);
+    }
+
+    chrome.tabs.executeScript(null, {
+        file: 'inject.js',
+        allFrames: true
+    }, function (e) {
+
     });
+    console.log('Injector executed.');
+}
+
+function checkAutoInject() {
+    console.log('Initing...');
+    storage.get(
+        {
+            server: '',
+            autoActivate: true
+        },
+        item => {
+            if (item.autoActivate) {
+                chrome.webNavigation.onCompleted.addListener(inject, {
+                    url: [
+                        {
+                            urlMatches:
+                                '(?:^|.)(youku.com|sohu.com|tudou.com|qq.com|iqiyi.com|youtube.com|acfun.cn|bilibili.com|mgtv.com|vimeo.com)(?:/|$)'
+                        }
+                    ]
+                });
+                console.log('Auto injector bound.');
+            } else {
+                if (chrome.webNavigation.onCompleted.hasListener(inject)) {
+                    chrome.webNavigation.onCompleted.removeListener(inject);
+                    console.log('Auto injector removed.');
+                }
+            }
+        }
+    );
+}
+
+chrome.runtime.onMessage.addListener((message, sender, respond) => {
+    console.log(message);
+    if (message.event === 'optionschange') {
+        console.log('Options changed and re-init...');
+        checkAutoInject();
+        respond({ success: true, response: "已收到消息" }, function (e) {
+            console.log(e);
+        });
+    }
+    if (message.from === "player") {
+        console.log("get msg from player");
+
+        respond({ success: true, response: "已收到消息" }, function (e) {
+            console.log(e);
+        })
+    }
 });
 
 
-
-
-// chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
-//     chrome.declarativeContent.onPageChanged.addRules([{
-//         conditions: [new chrome.declarativeContent.PageStateMatcher({
-//             pageUrl: { hostEquals: 'developer.chrome.com' },
-//         })
-//         ],
-//         actions: [new chrome.declarativeContent.ShowPageAction()]
-//     }]);
-// });
-
-
+// chrome.browserAction.onClicked.addListener(inject);
+// console.log('Action injector bound.');
+checkAutoInject();

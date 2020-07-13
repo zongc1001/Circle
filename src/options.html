@@ -1,24 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <style>
-        button {
-            height: 30px;
-            width: 30px;
-            outline: none;
-            margin: 10px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Coplay - Options</title>
+  <style>
+    body {
+      padding-bottom: 36px;
+    }
+
+    p {
+      line-height: normal;
+    }
+  </style>
 </head>
 
 <body>
-    <div id="buttonDiv">
-    </div>
-    <div>
-        <p>Choose a different background color!</p>
-    </div>
+  <table>
+    <tr>
+      <td>Your Id</td>
+      <td><input id="myId" type="text" size="16"></td>
+    </tr>
+    <tr>
+      <td>Peer's Id</td>
+      <td><input id="peerId" type="text" size="16"></td>
+    </tr>
+    <tr>
+      <td>Server</td>
+      <td><input id="server" type="text" size="16"></td>
+    </tr>
+
+    <tr>
+      <td>key</td>
+      <td><input id="key" type="text" size="16"></td>
+    </tr>
+
+    
+
+  </table>
+
+  <input id="connetcBtn" type="button" value="Connect">
+  <div class="tip">保存后重启浏览器生效</div>
+
+  <script src="options.js"></script>
 </body>
-<script src="options.js"></script>
 
 </html>

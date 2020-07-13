@@ -10,8 +10,10 @@
             "32": "./asset/img/get_started32.png",
             "48": "./asset/img/get_started48.png",
             "128": "./asset/img/get_started128.png"
-        }
+        },
+        "default_title": "Circle"
     },
+    
     "options_page": "options.html",
 
     "icons": {
@@ -24,7 +26,7 @@
         "activeTab",
         "declarativeContent",
         "storage",
-        "browserAction",
+        "webNavigation",
         "http://*.bilibili.com/*",
         "https://*.bilibili.com/*"
     ],
@@ -32,7 +34,7 @@
         "scripts": ["./dist/background.js"],
         "persistent": true
     },
-   
+
     "commands": {
         "_execute_browser_action": {
             "suggested_key": {
@@ -44,6 +46,10 @@
     },
     "web_accessible_resources": [
         "popup.js",
-        "dist/background.js"
+        "dist/background.js",
+        "inject.js",
+        "options.js",
+        "circle.js"
     ]
+
 }
