@@ -49,7 +49,8 @@
         "dist/background.js",
         "inject.js",
         "options.js",
-        "circle.js"
+        "circle.js",
+        "_generated_background_page.html"
     ]
 
 }

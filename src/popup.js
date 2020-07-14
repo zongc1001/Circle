@@ -1,7 +1,6 @@
 let myId = document.getElementById("myId");
 let peerId = document.getElementById("peerId");
-let myId = document.getElementById("myId");
-let peerId = document.getElementById("peerId");
+
 
 let status = document.getElementsById("status");
 

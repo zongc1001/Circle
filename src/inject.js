@@ -67,11 +67,9 @@
     console.log(video);
     if (video) {
         let actionArr = [
-            "play",
+            // "play",
             "pause",
-            "ontimeupdate",
-            "onvolumechange",
-            "onreadystatechange"
+            "playing"
         ]
         actionArr.forEach(x => {
             video.addEventListener(x, function (e) {

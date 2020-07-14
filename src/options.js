@@ -1,10 +1,12 @@
 let storage = chrome.storage.sync || chrome.storage.local;
 let server = get('server');
 let key = get('key');
-let autoActivate = get('auto-activate');
+let myId = get("myId");
+let peerId = get("peerId");
+
 
 function get(id) {
-  return document.getElementById(id) || id;
+  return document.getElementById(id);
 }
 
 function on(elem, type, listener) {
@@ -14,14 +16,16 @@ function on(elem, type, listener) {
 function restore() {
   storage.get(
     {
+      myId: '',
+      peerId: '',
       server: '',
-      key: '',
-      autoActivate: false
+      key: ''
     },
     item => {
+      myId.value = item.myId;
+      peerId.value = item.peerId;
       server.value = item.server;
       key.value = item.key;
-      autoActivate.checked = item.autoActivate;
     }
   );
 }
@@ -29,9 +33,10 @@ function restore() {
 function save() {
   storage.set(
     {
+      myId: myId.value,
+      peerId: peerId.value,
       server: server.value,
       key: key.value,
-      autoActivate: autoActivate.checked
     },
     () => {
       chrome.runtime.sendMessage({ event: 'optionschange' }, response => {
