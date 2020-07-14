@@ -109,14 +109,14 @@ function initConn() {
     })
 
     conn.on("data", function (data) {
-        switch (data) {
+        switch (data.action) {
             case "playing":
                 console.log("data received > playing");
-                sendMsgToInject({ from: "peer", action: data, curTime: 20 });
+                sendMsgToInject({ from: "peer", action: data.action, curTime: data.curTime });
                 break;
             case "pause":
                 console.log("data received > pause");
-                sendMsgToInject({ from: "peer", action: data, curTime: 10 });
+                sendMsgToInject({ from: "peer", action: data.action, curTime: data.curTime });
                 break;
             default:
                 console.log("data received: " + data);
