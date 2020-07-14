@@ -1,6 +1,8 @@
 (function () {
+
     if (data("inject")) return;
     data("inject", true);
+
     function loadScript(url, callback) {
         function doCallback() {
             if (typeof callback === 'function') {
@@ -62,7 +64,6 @@
         }
     });
 
-
     let video = document.getElementsByTagName("video")[0];
     console.log(video);
     if (video) {
@@ -74,12 +75,12 @@
         actionArr.forEach(x => {
             video.addEventListener(x, function (e) {
                 console.log(e);
-                // console.log(chrome.runtime.sendMessage);
                 chrome.runtime.sendMessage(
                     {
                         greeting: '这里是inject.js',
                         from: "player",
-                        action: x
+                        action: x,
+                        curTime: video.currentTime
                     },
                     (response) => {
                         console.log(response);
@@ -91,5 +92,33 @@
     }
 
 
+    chrome.runtime.onMessage.addListener((message, sender, respond) => {
+        console.log(message);
+        if (message.from === "peer") {
+
+            console.log("get msg from peer, the sender is " + sender);
+            console.log(typeof message.action)
+            if (!video) return;
+            if (message.curTime &&
+                Math.abs(message.curTime - video.currentTime) > 1
+            ) {
+                video.currentTime = message.curTime;
+            }
+            switch (message.action) {
+                case "playing":
+                    video.play();
+
+                    break;
+                case "pause":
+                    video.pause();
+                default:
+                    console.log("无法处理的消息: " + message);
+                    break;
+            }
+            respond({ success: true, response: "已收到消息" }, function (e) {
+                console.log(e);
+            })
+        }
+    });
 
 })();

@@ -2,7 +2,7 @@ import Peer from "peerjs"
 let storage = chrome.storage.sync || chrome.storage.local;
 let peer = null;
 let conn = null;
-
+let urls = '(?:^|.)(youku.com|sohu.com|tudou.com|qq.com|iqiyi.com|youtube.com|acfun.cn|bilibili.com|mgtv.com|vimeo.com)(?:/|$)';
 let circleOptions = {};
 
 function initPeer() {
@@ -81,21 +81,26 @@ function initPeer() {
                     return
                 }
                 conn = c;
+                initConn();
                 chrome.browserAction.setBadgeText({ text: 'ON' });
                 chrome.browserAction.setBadgeBackgroundColor({ color: [30, 255, 30, 255] });
                 console.log('Connected to: ' + conn.peer)
             })
 
+            peer.on("disconnected", function () {
+                peer.reconnect();
+            })
 
+            peer.on("close", function (err) {
+                console.log("peer close: " + err);
+            })
         }
     );
 }
 
-function join(peerId) {
-    conn = peer.connect(peerId, {
-        label: 'Circle',
-        reliable: false
-    })
+function initConn() {
+    // if(conn !== null) return;
+    console.log("initConn");
     conn.on("open", function () {
         chrome.browserAction.setBadgeText({ text: 'ON' });
         chrome.browserAction.setBadgeBackgroundColor({ color: [30, 255, 30, 255] });
@@ -103,21 +108,45 @@ function join(peerId) {
 
     })
 
-    conn.on("error", function(err) {
+    conn.on("data", function (data) {
+        switch (data) {
+            case "playing":
+                console.log("data received > playing");
+                sendMsgToInject({ from: "peer", action: data, curTime: 20 });
+                break;
+            case "pause":
+                console.log("data received > pause");
+                sendMsgToInject({ from: "peer", action: data, curTime: 10 });
+                break;
+            default:
+                console.log("data received: " + data);
+                break;
+        }
+    })
+
+    conn.on("close", function () {
+        conn = null;
+    })
+
+    conn.on("error", function (err) {
         console.error(err);
     })
 }
 
+function join(peerId) {
+    conn = peer.connect(peerId, {
+        label: 'Circle',
+        reliable: false
+    })
+    initConn();
+}
 
 function inject() {
-    // if (chrome.runtime.lastError) {
-    //     console.error(chrome.runtime.lastError.message);
-    // }
     chrome.tabs.executeScript(null, {
         file: 'inject.js',
         allFrames: true
     }, function (e) {
-        
+
     });
     console.log('Injector executed.');
 }
@@ -126,12 +155,34 @@ function checkAutoInject() {
     chrome.webNavigation.onCompleted.addListener(inject, {
         url: [
             {
-                urlMatches:
-                    '(?:^|.)(youku.com|sohu.com|tudou.com|qq.com|iqiyi.com|youtube.com|acfun.cn|bilibili.com|mgtv.com|vimeo.com)(?:/|$)'
+                urlMatches: urls
             }
         ]
     });
 }
+
+function sendMsgToInject(message, callback) {
+    chrome.tabs.query(
+        {
+            // active: true,
+            currentWindow: true,
+            url: [
+                "http://*.bilibili.com/video/*",
+                "https://*.bilibili.com/video/*"
+            ]
+        },
+        function (tabs) {
+            chrome.tabs.sendMessage(
+                tabs[0].id,
+                message,
+                function (response) {
+                    if (callback) callback(response);
+                });
+        }
+    );
+
+}
+
 
 chrome.runtime.onMessage.addListener((message, sender, respond) => {
     console.log(message);
@@ -145,9 +196,9 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
     }
     if (message.from === "player") {
         console.log("get msg from player");
-        
+
         console.log(typeof message.action)
-        conn.send(message.action)
+        conn.send(message)
         respond({ success: true, response: "已收到消息" }, function (e) {
             console.log(e);
         })

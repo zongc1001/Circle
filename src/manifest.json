@@ -27,6 +27,7 @@
         "declarativeContent",
         "storage",
         "webNavigation",
+        "tabs",
         "http://*.bilibili.com/*",
         "https://*.bilibili.com/*"
     ],
