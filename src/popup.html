@@ -2,48 +2,48 @@
 <html lang="zh">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Coplay - Options</title>
+  <style>
+    body {
+      padding-bottom: 36px;
+    }
 
+    p {
+      line-height: normal;
+    }
+  </style>
 </head>
 
 <body>
-    <!-- <div>
-        <button id="changeColor"></button>
-    </div> -->
-    <table>
-        <tr>
-            <td>Your Id</td>
-            <td><input id="myId" type="text" size="16"></td>
-        </tr>
-        <tr>
-            <td>Peer's Id</td>
-            <td><input id="peerId" type="text" size="16"></td>
-        </tr>
-        <tr>
-            <td>Server</td>
-            <td><input id="server" type="text" size="16"></td>
-        </tr>
-        
-        <tr>
-            <td>key</td>
-            <td><input id="key" type="text" size="16"></td>
-        </tr>
-        
-        <tr>
-            <td> Status:</td>
-            <td><span id="status"> disconnect </span><br></td>
-        </tr>
+  <table>
+    <tr>
+      <td>Your Id</td>
+      <td><input id="myId" type="text" size="16"></td>
+    </tr>
+    <tr>
+      <td>Peer's Id</td>
+      <td><input id="peerId" type="text" size="16"></td>
+    </tr>
+    <tr>
+      <td>Server</td>
+      <td><input id="server" type="text" size="16" placeholder="zongchen.xyz" value="zongchen.xyz"></td>
+    </tr>
 
-    </table>
+    <tr>
+      <td>key</td>
+      <td><input id="key" type="text" size="16" placeholder="peerjs" value="peerjs"></td>
+    </tr>
 
-    <input id="connetcBtn" type="button" value="Connect">
 
-    <div class="tip">Right click the extention icon and click the options to set your id and your peer's id in</div>
 
-    <script src="popup.js"></script>
+  </table>
+
+  <input type="button" id="connect" value="connect">
+
+
+
+  <script src="popup.js"></script>
 </body>
 
 </html>

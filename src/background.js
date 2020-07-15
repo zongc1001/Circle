@@ -2,8 +2,9 @@ import Peer from "peerjs"
 let storage = chrome.storage.sync || chrome.storage.local;
 let peer = null;
 let conn = null;
-let urls = '(?:^|.)(youku.com|sohu.com|tudou.com|qq.com|iqiyi.com|youtube.com|acfun.cn|bilibili.com|mgtv.com|vimeo.com)(?:/|$)';
-let circleOptions = {};
+let urls = '(?:^|.)(bilibili.com)(?:/|$)';
+let circleOption = {};
+let autoReconnect = true;
 
 function initPeer() {
     storage.get(
@@ -15,7 +16,7 @@ function initPeer() {
         },
         item => {
             console.log(item);
-
+            circleOption = item;
             peer = new Peer(item.myId, {
                 host: item.server || "zongchen.xyz",
                 port: 9000,
@@ -67,8 +68,16 @@ function initPeer() {
                 console.log(item.peerId);
                 join(item.peerId);
             })
-            peer.on('error', function (err) {
-                console.error(err);
+            peer.on("error", function (err) {
+                switch (err.type) {
+                    case "peer-unavailable":
+                        peer.disconnect();
+                        break;
+                    default:
+                        console.log(err);
+                        break;
+                }
+                setBadge({ text: "OFF", color: [255, 30, 30, 255] });
             })
             peer.on("connection", c => {
                 if (conn && conn.open) {
@@ -82,17 +91,27 @@ function initPeer() {
                 }
                 conn = c;
                 initConn();
-                chrome.browserAction.setBadgeText({ text: 'ON' });
-                chrome.browserAction.setBadgeBackgroundColor({ color: [30, 255, 30, 255] });
+                setBadge({ text: "ON", color: [30, 255, 30, 255] });
+
                 console.log('Connected to: ' + conn.peer)
             })
 
             peer.on("disconnected", function () {
-                peer.reconnect();
+                console.log("事件: disconnected");
+                setBadge({ text: "OFF", color: [255, 30, 30, 255] });
+
+                if (autoReconnect) {
+                    setTimeout(() => {
+                        console.log("reconneting...");
+                        peer.reconnect();
+                    }, 1000)
+                }
             })
 
             peer.on("close", function (err) {
-                console.log("peer close: " + err);
+                console.log("事件: close");
+                setBadge({ text: "OFF", color: [255, 30, 30, 255] });
+
             })
         }
     );
@@ -102,8 +121,8 @@ function initConn() {
     // if(conn !== null) return;
     console.log("initConn");
     conn.on("open", function () {
-        chrome.browserAction.setBadgeText({ text: 'ON' });
-        chrome.browserAction.setBadgeBackgroundColor({ color: [30, 255, 30, 255] });
+        setBadge({ text: "ON", color: [30, 255, 30, 255] });
+
         console.log('Connected to: ' + conn.peer)
 
     })
@@ -126,10 +145,13 @@ function initConn() {
 
     conn.on("close", function () {
         conn = null;
+        console.log("连接中断");
+        setBadge({ text: "OFF", color: [255, 30, 30, 255] });
+
     })
 
     conn.on("error", function (err) {
-        console.error(err);
+        console.log(err);
     })
 }
 
@@ -144,22 +166,13 @@ function join(peerId) {
 function inject() {
     chrome.tabs.executeScript(null, {
         file: 'inject.js',
-        allFrames: true
+        // allFrames: true
     }, function (e) {
 
     });
     console.log('Injector executed.');
 }
 
-function checkAutoInject() {
-    chrome.webNavigation.onCompleted.addListener(inject, {
-        url: [
-            {
-                urlMatches: urls
-            }
-        ]
-    });
-}
 
 function sendMsgToInject(message, callback) {
     chrome.tabs.query(
@@ -180,23 +193,47 @@ function sendMsgToInject(message, callback) {
                 });
         }
     );
+}
 
+//设置图标的颜色和字体
+function setBadge(option) {
+    if (option.color) {
+        chrome.browserAction.setBadgeBackgroundColor({ color: option.color });
+    }
+    if (option.text) {
+        chrome.browserAction.setBadgeText({ text: option.text });
+
+    }
 }
 
 
 chrome.runtime.onMessage.addListener((message, sender, respond) => {
     console.log(message);
-    if (message.event === 'optionschange') {
+    if (message.event === "optionschange") {
         console.log('Options changed and re-init...');
-        peer.destroy();
+        peer.disconnect();
+        peer = null;
+
         initPeer();
         respond({ success: true, response: "已收到消息" }, function (e) {
             console.log(e);
         });
     }
+
+    if (message.event === "connect") {
+        // join(circleOption.peerId);
+        if (peer && !peer.destroyed) {
+            peer.destroy();
+            peer = null;
+        }
+        initPeer();
+        respond({ success: true, response: "已收到消息" }, function (e) {
+            console.log(e);
+        });
+    }
+
     if (message.from === "player") {
         console.log("get msg from player");
-
         console.log(typeof message.action)
         conn.send(message)
         respond({ success: true, response: "已收到消息" }, function (e) {
@@ -204,5 +241,12 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
         })
     }
 });
-initPeer();
-checkAutoInject();
+
+chrome.webNavigation.onCompleted.addListener(inject, {
+    url: [
+        {
+            urlMatches: urls
+        }
+    ]
+});
+
