@@ -6,21 +6,21 @@
     "browser_action": {
         "default_popup": "popup.html",
         "default_icons": {
-            "16": "./asset/img/get_started16.png",
-            "32": "./asset/img/get_started32.png",
-            "48": "./asset/img/get_started48.png",
-            "128": "./asset/img/get_started128.png"
+            "16": "./asset/img/icon.png",
+            "32": "./asset/img/icon.png",
+            "48": "./asset/img/icon.png",
+            "128": "./asset/img/icon.png"
         },
         "default_title": "Circle"
     },
-    
+
     "options_page": "options.html",
 
     "icons": {
-        "16": "./asset/img/get_started16.png",
-        "32": "./asset/img/get_started32.png",
-        "48": "./asset/img/get_started48.png",
-        "128": "./asset/img/get_started128.png"
+        "16": "./asset/img/icon.png",
+        "32": "./asset/img/icon.png",
+        "48": "./asset/img/icon.png",
+        "128": "./asset/img/icon.png"
     },
     "permissions": [
         "activeTab",
