@@ -69,14 +69,7 @@ function initPeer() {
                 join(item.peerId);
             })
             peer.on("error", function (err) {
-                switch (err.type) {
-                    case "peer-unavailable":
-                        peer.disconnect();
-                        break;
-                    default:
-                        console.log(err);
-                        break;
-                }
+                console.log(err);
                 setBadge({ text: "OFF", color: [255, 30, 30, 255] });
             })
             peer.on("connection", c => {
@@ -100,12 +93,12 @@ function initPeer() {
                 console.log("事件: disconnected");
                 setBadge({ text: "OFF", color: [255, 30, 30, 255] });
 
-                if (autoReconnect) {
-                    setTimeout(() => {
-                        console.log("reconneting...");
-                        peer.reconnect();
-                    }, 1000)
-                }
+                // if (autoReconnect) {
+                //     setTimeout(() => {
+                //         console.log("reconneting...");
+                //         peer.reconnect();
+                //     }, 1000)
+                // }
             })
 
             peer.on("close", function (err) {
@@ -149,7 +142,7 @@ function initConn() {
         setBadge({ text: "OFF", color: [255, 30, 30, 255] });
 
     })
-
+    
     conn.on("error", function (err) {
         console.log(err);
     })
@@ -158,7 +151,7 @@ function initConn() {
 function join(peerId) {
     conn = peer.connect(peerId, {
         label: 'Circle',
-        reliable: false
+        reliable: true
     })
     initConn();
 }
