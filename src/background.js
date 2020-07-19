@@ -1,4 +1,4 @@
-import Peer from "peerjs"
+import Peer from "peerjs";
 let storage = chrome.storage.sync || chrome.storage.local;
 let peer = null;
 let conn = null;
@@ -45,6 +45,7 @@ function initPeer() {
                     { url: 'stun:stun.voipstunt.com' },
                     { url: 'stun:stun.voxgratia.org' },
                     { url: 'stun:stun.xten.com' },
+                    { url: 'turn:homeo@turn.bistri.com:80', credential: 'homeo' },
                     {
                         url: 'turn:numb.viagenie.ca',
                         credential: 'muazkh',
@@ -60,34 +61,36 @@ function initPeer() {
                         credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
                         username: '28224511:1379330808'
                     }
-                ]
+                ],
+                sdpSemantics: 'unified-plan'
             })
 
             peer.on("open", id => {
                 console.log("connected, Id: " + id);
                 console.log(item.peerId);
-                join(item.peerId);
-            })
+                setBadge({ text: "ON", color: [30, 255, 30, 255] });
+
+            });
             peer.on("error", function (err) {
                 console.log(err);
                 setBadge({ text: "OFF", color: [255, 30, 30, 255] });
-            })
+            });
             peer.on("connection", c => {
                 if (conn && conn.open) {
                     c.on('open', function () {
                         c.send('Already connected to another client')
                         setTimeout(function () {
-                            c.close()
-                        }, 500)
-                    })
-                    return
+                            c.close();
+                        }, 500);
+                    });
+                    return;
                 }
                 conn = c;
                 initConn();
                 setBadge({ text: "ON", color: [30, 255, 30, 255] });
 
                 console.log('Connected to: ' + conn.peer)
-            })
+            });
 
             peer.on("disconnected", function () {
                 console.log("事件: disconnected");
@@ -99,13 +102,13 @@ function initPeer() {
                 //         peer.reconnect();
                 //     }, 1000)
                 // }
-            })
+            });
 
             peer.on("close", function (err) {
                 console.log("事件: close");
                 setBadge({ text: "OFF", color: [255, 30, 30, 255] });
 
-            })
+            });
         }
     );
 }
@@ -116,9 +119,9 @@ function initConn() {
     conn.on("open", function () {
         setBadge({ text: "ON", color: [30, 255, 30, 255] });
 
-        console.log('Connected to: ' + conn.peer)
+        console.log('Connected to: ' + conn.peer);
 
-    })
+    });
 
     conn.on("data", function (data) {
         switch (data.action) {
@@ -137,15 +140,14 @@ function initConn() {
     })
 
     conn.on("close", function () {
-        conn = null;
         console.log("连接中断");
         setBadge({ text: "OFF", color: [255, 30, 30, 255] });
+        conn = null;
+    });
 
-    })
-    
     conn.on("error", function (err) {
         console.log(err);
-    })
+    });
 }
 
 function join(peerId) {
@@ -213,17 +215,26 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
         });
     }
 
-    if (message.event === "connect") {
+    if (message.event === "connectToPeerServer") {
         // join(circleOption.peerId);
-        if (peer && !peer.destroyed) {
-            peer.destroy();
-            peer = null;
+        if (peer && peer.open){
+            peer.disconnect();
         }
         initPeer();
         respond({ success: true, response: "已收到消息" }, function (e) {
             console.log(e);
         });
     }
+    if (message.event === "connectToYourPeer") {
+        // join(circleOption.peerId);
+        storage.get({ peerId: '' }, item => {
+            join(item.peerId);
+        })
+        respond({ success: true, response: "已收到消息" }, function (e) {
+            console.log(e);
+        });
+    }
+
 
     if (message.from === "player") {
         console.log("get msg from player");

@@ -31,7 +31,7 @@ function restore() {
     );
 }
 
-function connect() {
+function connectToPeerServer() {
     storage.set(
         {
             myId: myId.value,
@@ -40,7 +40,7 @@ function connect() {
             key: key.value,
         },
         () => {
-            chrome.runtime.sendMessage({ event: 'connect' }, response => {
+            chrome.runtime.sendMessage({ event: 'connectToPeerServer' }, response => {
                 if (response.success) {
                     window.close();
                 }
@@ -50,5 +50,24 @@ function connect() {
 }
 
 
-on('connect', 'click', connect);
+function connectToYourPeer() {
+    storage.set(
+        {
+            myId: myId.value,
+            peerId: peerId.value,
+            server: server.value,
+            key: key.value,
+        },
+        () => {
+            chrome.runtime.sendMessage({ event: 'connectToYourPeer' }, response => {
+                if (response.success) {
+                    window.close();
+                }
+            });
+        }
+    );
+}
+
+on("connectToPeerServer", "click", connectToPeerServer);
+on("connectToYourPeer", "click", connectToYourPeer);
 restore();
