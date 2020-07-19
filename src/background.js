@@ -46,6 +46,12 @@ function initPeer() {
                     { url: 'stun:stun.voxgratia.org' },
                     { url: 'stun:stun.xten.com' },
                     { url: 'turn:homeo@turn.bistri.com:80', credential: 'homeo' },
+                    { url: 'stun:47.95.119.173:3478' },
+                    {
+                        url: 'turn:47.95.119.173:3478',
+                        username: 'zongchen',
+                        credential: 'onmyown0.',
+                    },
                     {
                         url: 'turn:numb.viagenie.ca',
                         credential: 'muazkh',
@@ -168,7 +174,6 @@ function inject() {
     console.log('Injector executed.');
 }
 
-
 function sendMsgToInject(message, callback) {
     chrome.tabs.query(
         {
@@ -217,7 +222,7 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
 
     if (message.event === "connectToPeerServer") {
         // join(circleOption.peerId);
-        if (peer && peer.open){
+        if (peer && peer.open) {
             peer.disconnect();
         }
         initPeer();
