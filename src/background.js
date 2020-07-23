@@ -34,7 +34,7 @@ function initPeer() {
                         },
                     ]
                 }
-            })
+            });
 
             peer.on("open", id => {
                 console.log("connected, Id: " + id);

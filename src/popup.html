@@ -4,43 +4,47 @@
 <head>
   <meta charset="UTF-8" />
   <title>Coplay - Options</title>
-  <style>
-    body {
-      padding-bottom: 36px;
-    }
-
-    p {
-      line-height: normal;
-    }
-  </style>
+  <link rel="stylesheet" href="./popup.css">
 </head>
 
 <body>
-  <table>
-    <tr>
-      <td>Your Id</td>
-      <td><input id="myId" type="text" size="16"></td>
-    </tr>
-    <tr>
-      <td>Peer's Id</td>
-      <td><input id="peerId" type="text" size="16"></td>
-    </tr>
-    <tr>
-      <td>Server</td>
-      <td><input id="server" type="text" size="16" placeholder="zongchen.xyz" value="zongchen.xyz"></td>
-    </tr>
-
-    <tr>
-      <td>key</td>
-      <td><input id="key" type="text" size="16" placeholder="peerjs" value="peerjs"></td>
-    </tr>
-
-
-
-  </table>
-
-  <input type="button" id="connectToPeerServer" value="connectToPeerServer">
-  <input type="button" id="connectToYourPeer" value="connectToYourPeer">
+  <div class="container">
+    <div class="page0">
+      <div>
+        <table>
+          <tr>
+            <td>Your Id</td>
+            <td><input id="myId" type="text" size="16"></td>
+          </tr>
+          <tr>
+            <td>Peer's Id</td>
+            <td><input id="peerId" type="text" size="16"></td>
+          </tr>
+          <tr>
+            <td>Server</td>
+            <td><input id="server" type="text" size="16" placeholder="zongchen.xyz" value="zongchen.xyz"></td>
+          </tr>
+  
+          <tr>
+            <td>key</td>
+            <td><input id="key" type="text" size="16" placeholder="peerjs" value="peerjs"></td>
+          </tr>
+        </table>
+      </div>
+      
+      <div class="button">
+        <input type="button" id="connectToPeerServer" value="connectToPeerServer">
+        <input type="button" id="connectToYourPeer" value="connectToYourPeer">
+  
+        <input type="button" id="next" value="next">
+      
+      </div>
+    
+    </div>
+    <div class="page1">
+      adfa
+    </div>
+  </div>
 
 
 

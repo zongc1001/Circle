@@ -1,0 +1,48 @@
+body {
+    max-width: 12rem;
+    padding: 0;
+    margin: 0;
+
+}
+
+.container {
+    width: 24rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.page0 {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.page1 {
+    width: 50%;
+    display: flex;
+}
+
+.button {
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes slideleft {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-100%); }
+}
+
+.toleft {
+    animation-name: slideleft;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    
+}
+
+.toright {
+    animation-name: slideleft;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-direction: reverse;
+}
+

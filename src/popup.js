@@ -13,7 +13,6 @@ function on(elem, type, listener) {
     console.log(elem);
     get(elem).addEventListener(type, listener, false);
 }
-
 function restore() {
     storage.get(
         {
@@ -30,7 +29,6 @@ function restore() {
         }
     );
 }
-
 function connectToPeerServer() {
     storage.set(
         {
@@ -68,6 +66,11 @@ function connectToYourPeer() {
     );
 }
 
+function next() {
+    document.body.classList.add("toleft");
+}
+
 on("connectToPeerServer", "click", connectToPeerServer);
 on("connectToYourPeer", "click", connectToYourPeer);
+on("next", "click", next);
 restore();

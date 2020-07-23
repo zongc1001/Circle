@@ -45,39 +45,19 @@
         return dataset[key];
     }
 
-    let circleOptions = {
-        server: '',
-        key: '',
-        autoActivate: true
-    };
-
-    let storage = chrome.storage.sync || chrome.storage.local;
-    storage.get(circleOptions, options => {
-        circleOptions = Object.assign(circleOptions, options);
-        data('coplayOptions', JSON.stringify(circleOptions));
-        if (data('circle')) {
-            return;
-        } else {
-            data('circle', true);
-            console.log("load circle.js");
-            loadScript(url('circle.js'));
-        }
-    });
-
     let video = document.getElementsByTagName("video")[0];
     console.log(video);
     if (video) {
         let actionArr = [
-            // "play",
             "pause",
             "playing"
-        ]
+        ];
         actionArr.forEach(x => {
             video.addEventListener(x, function (e) {
                 console.log(e);
                 chrome.runtime.sendMessage(
                     {
-                        greeting: '这里是inject.js',
+                        greeting: "这里是inject.js",
                         from: "player",
                         action: x,
                         curTime: video.currentTime
@@ -85,19 +65,15 @@
                     (response) => {
                         console.log(response);
                     }
-                )
-            })
-        })
-
+                );
+            });
+        });
     }
-
 
     chrome.runtime.onMessage.addListener((message, sender, respond) => {
         console.log(message);
         if (message.from === "peer") {
-
             console.log("get msg from peer, the sender is " + sender);
-            console.log(typeof message.action)
             if (!video) return;
             if (message.curTime &&
                 Math.abs(message.curTime - video.currentTime) > 1
@@ -107,18 +83,17 @@
             switch (message.action) {
                 case "playing":
                     video.play();
-
                     break;
                 case "pause":
                     video.pause();
+                    break;
                 default:
                     console.log("无法处理的消息: " + message);
                     break;
             }
             respond({ success: true, response: "已收到消息" }, function (e) {
                 console.log(e);
-            })
+            });
         }
     });
-
 })();
