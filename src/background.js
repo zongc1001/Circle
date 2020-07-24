@@ -2,21 +2,16 @@ import Peer from "peerjs";
 let storage = chrome.storage.sync || chrome.storage.local;
 let peer = null;
 let conn = null;
-let urls = '(?:^|.)(youku.com|sohu.com|tudou.com|qq.com|iqiyi.com|youtube.com|acfun.cn|bilibili.com|mgtv.com|vimeo.com)(?:/|$)';
-
-let circleOption = {};
-let autoReconnect = true;
+let urls = '(?:^|.)(youku.com|sohu.com|tudou.com|qq.com|iqiyi.com|youtube.com|acfun.cn|bilibili.com/video|mgtv.com|vimeo.com)(?:/|$)';
 
 
 
-
-var elem = document.createElement('meta');
-elem.httpEquiv = "Content-Security-Policy";
-elem.content = "script-src 'none'";
-document.getElementsByTagName('head')[0].appendChild(elem);
-console.log("add");
-
-function initPeer() {
+function initPeer(callback) {
+    function doCallback() {
+        if (typeof callback === 'function') {
+            callback();
+        }
+    }
     storage.get(
         {
             myId: '',
@@ -26,7 +21,6 @@ function initPeer() {
         },
         item => {
             console.log(item);
-            circleOption = item;
             peer = new Peer(item.myId, {
                 host: item.server || "zongchen.xyz",
                 port: 9000,
@@ -49,7 +43,8 @@ function initPeer() {
             peer.on("open", id => {
                 console.log("connected, Id: " + id);
                 console.log(item.peerId);
-                setBadge({ text: "ON", color: [30, 255, 30, 255] });
+                setPopupLogin(true);
+                doCallback();
             });
             peer.on("error", function (err) {
                 console.log(err);
@@ -69,13 +64,13 @@ function initPeer() {
                 initConn();
                 setBadge({ text: "ON", color: [30, 255, 30, 255] });
 
-                console.log('Connected to: ' + conn.peer)
+                console.log('Connected to: ' + conn.peer);
             });
 
             peer.on("disconnected", function () {
                 console.log("事件: disconnected");
                 setBadge({ text: "OFF", color: [255, 30, 30, 255] });
-
+                setPopupLogin(false);
                 // if (autoReconnect) {
                 //     setTimeout(() => {
                 //         console.log("reconneting...");
@@ -86,6 +81,7 @@ function initPeer() {
 
             peer.on("close", function (err) {
                 console.log("事件: close");
+                setPopupLogin(false);
                 setBadge({ text: "OFF", color: [255, 30, 30, 255] });
 
             });
@@ -117,7 +113,7 @@ function initConn() {
                 console.log("data received: " + data);
                 break;
         }
-    })
+    });
 
     conn.on("close", function () {
         console.log("连接中断");
@@ -151,7 +147,16 @@ function inject() {
     console.log('Injector executed.');
 }
 
-function sendMsgToInject(message, callback) {
+function setPopupLogin(login) {
+    let views = chrome.extension.getViews({ type: "popup" });
+    if (views.length > 0) {
+        console.log(views[0]);
+        let popup = views[0];
+        popup.methodExpose.setLogin(login);
+    }
+}
+
+function sendMsgToInject(message) {
     chrome.tabs.query(
         {
             active: true,
@@ -162,7 +167,7 @@ function sendMsgToInject(message, callback) {
                 tabs[0].id,
                 message,
                 function (response) {
-                    if (callback) callback(response);
+                    console.log(response);
                 });
         }
     );
@@ -198,12 +203,12 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
         if (peer && peer.open) {
             peer.disconnect();
         }
+
+
+        respond({ success: true, response: "已收到消息" }, function (e) {
+            console.log(e);
+        });
         initPeer();
-        if (peer && peer.open) {
-            respond({ success: true, response: "已收到消息" }, function (e) {
-                console.log(e);
-            });
-        }
     }
     if (message.event === "connectToYourPeer") {
         // join(circleOption.peerId);
@@ -227,7 +232,14 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
         } else {
             respond({ success: false, respond: "连接还没有打开" }, e => {
                 console.log(e);
-            })
+            });
+        }
+    }
+    if(message.event === 'haslogin') {
+        if(peer && peer.on) {
+            respond({haslogin: true});
+        } else {
+            respond({haslogin: false});
         }
     }
 });

@@ -1,7 +1,11 @@
 let storage = chrome.storage.sync || chrome.storage.local;
 let myId = get("myId");
 let peerId = get("peerId");
-
+let tips = document.getElementsByClassName("tip");
+let tip0 = tips[0];
+let tip1 = tips[1];
+console.log(tip0);
+console.log(tip1);
 
 function get(id) {
     return document.getElementById(id);
@@ -28,14 +32,15 @@ function connectToPeerServer() {
     storage.set(
         {
             myId: myId.value,
-            peerId: peerId.value,
         },
         () => {
+            if (chrome.runtime.lastError) {
+                console.log(chrome.runtime.lastError.message);
+            }
             chrome.runtime.sendMessage({ event: 'connectToPeerServer' }, response => {
                 console.log(response);
                 if (response.success) {
                     document.body.classList.add("toleft");
-                    
                 }
             });
         }
@@ -46,9 +51,12 @@ function connectToPeerServer() {
 function connectToYourPeer() {
     storage.set(
         {
-            myId: myId.value,
+            peerId: peerId.value,
         },
         () => {
+            if (chrome.runtime.lastError) {
+                console.log(chrome.runtime.lastError.message);
+            }
             chrome.runtime.sendMessage({ event: 'connectToYourPeer' }, response => {
                 if (response.success) {
                     window.close();
@@ -59,6 +67,22 @@ function connectToYourPeer() {
 }
 
 
+chrome.runtime.sendMessage({ event: "haslogin" }, response => {
+    if (response.haslogin) {
+        document.body.classList.add("moveToLeft");
+    } else {
+        document.body.classList.remove("moveToLeft");
+    }
+});
+
 on("connectToPeerServer", "click", connectToPeerServer);
 on("connectToYourPeer", "click", connectToYourPeer);
 restore();
+
+window.methodExpose = {
+    setLogin: function(value) {
+        storage.set({
+            login: value
+        });
+    }
+};

@@ -86,6 +86,10 @@ body {
     to   { transform: translateX(-100%); }
 }
 
+.moveToLeft {
+    transform: translateX(-100%);
+}
+
 .toleft {
     animation-name: slideleft;
     animation-duration: 1s;
