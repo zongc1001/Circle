@@ -54,6 +54,10 @@ body {
     color: grey;
 }
 
+.success {
+    color: lime;
+}
+
 #myId {
     margin: 1rem;
     margin-top: .1rem;
