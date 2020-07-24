@@ -1,12 +1,21 @@
 body {
-    max-width: 12rem;
+    max-width: 18rem;
     padding: 0;
     margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
 
+.text-input {
+    padding: 0.5em 0.6em;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px #ddd;
+    border-radius: 4px;
+    vertical-align: middle;
+    box-sizing: border-box;
 }
 
 .container {
-    width: 24rem;
+    width: 200%;
     display: flex;
     flex-direction: row;
 }
@@ -15,16 +24,61 @@ body {
     width: 50%;
     display: flex;
     flex-direction: column;
+    
 }
 
 .page1 {
     width: 50%;
     display: flex;
+    flex-direction: column;
 }
 
 .button {
-    display: flex;
-    flex-direction: column;
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 0.5em 1em;
+    color: rgba(0, 0, 0, 0.80);
+    border: none rgba(0, 0, 0, 0);
+    background-color: #E6E6E6;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.tip {
+    padding: 2px;
+    margin: 1rem;
+    margin-top: .2rem;
+    margin-bottom: .2rem;
+    color: grey;
+}
+
+#myId {
+    margin: 1rem;
+    margin-top: .1rem;
+    margin-bottom: .5rem;
+    font-size: 1.5rem;
+}
+
+#connectToPeerServer {
+    margin: 1rem;
+    margin-top: 0rem;
+    margin-bottom: 1rem;
+}
+
+
+#peerId {
+    margin: 1rem;
+    margin-top: .1rem;
+    margin-bottom: .5rem;
+    font-size: 1.5rem;
+}
+
+#connectToYourPeer {
+    margin: 1rem;
+    margin-top: 0rem;
+    margin-bottom: 1rem;
 }
 
 @keyframes slideleft {
@@ -36,7 +90,6 @@ body {
     animation-name: slideleft;
     animation-duration: 1s;
     animation-fill-mode: forwards;
-    
 }
 
 .toright {

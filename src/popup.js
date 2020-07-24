@@ -1,6 +1,4 @@
 let storage = chrome.storage.sync || chrome.storage.local;
-let server = get('server');
-let key = get('key');
 let myId = get("myId");
 let peerId = get("peerId");
 
@@ -18,29 +16,26 @@ function restore() {
         {
             myId: '',
             peerId: '',
-            server: '',
-            key: ''
         },
         item => {
             myId.value = item.myId;
             peerId.value = item.peerId;
-            server.value = item.server;
-            key.value = item.key;
         }
     );
 }
 function connectToPeerServer() {
+    console.log("sign in clicked");
     storage.set(
         {
             myId: myId.value,
             peerId: peerId.value,
-            server: server.value,
-            key: key.value,
         },
         () => {
             chrome.runtime.sendMessage({ event: 'connectToPeerServer' }, response => {
+                console.log(response);
                 if (response.success) {
-                    window.close();
+                    document.body.classList.add("toleft");
+                    
                 }
             });
         }
@@ -52,9 +47,6 @@ function connectToYourPeer() {
     storage.set(
         {
             myId: myId.value,
-            peerId: peerId.value,
-            server: server.value,
-            key: key.value,
         },
         () => {
             chrome.runtime.sendMessage({ event: 'connectToYourPeer' }, response => {
@@ -66,11 +58,7 @@ function connectToYourPeer() {
     );
 }
 
-function next() {
-    document.body.classList.add("toleft");
-}
 
 on("connectToPeerServer", "click", connectToPeerServer);
 on("connectToYourPeer", "click", connectToYourPeer);
-on("next", "click", next);
 restore();

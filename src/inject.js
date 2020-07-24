@@ -2,6 +2,14 @@
 
     if (data("inject")) return;
     data("inject", true);
+    let video = document.getElementsByTagName("video")[0];
+    let actionArr = [
+        "pause",
+        "playing"
+    ];
+
+
+
 
     function loadScript(url, callback) {
         function doCallback() {
@@ -45,29 +53,48 @@
         return dataset[key];
     }
 
-    let video = document.getElementsByTagName("video")[0];
+
+
+
+    function addEventListenerToVideo(x) {
+        video.addEventListener(x, function (e) {
+            console.log(e);
+
+            chrome.runtime.sendMessage(
+                {
+                    greeting: "这里是inject.js",
+                    from: "player",
+                    action: x,
+                    curTime: video.currentTime
+                },
+                (response) => {
+                    console.log(response);
+                }
+            );
+        });
+    }
+
+    function abort(e) {
+        console.log(e);
+        setTimeout(function () {
+            video = document.getElementsByTagName("video")[0];
+            actionArr.forEach(x => {
+                addEventListenerToVideo(x);
+            });
+            video.addEventListener("abort", abort);
+        }, 500);
+
+    }
+
     console.log(video);
     if (video) {
-        let actionArr = [
-            "pause",
-            "playing"
-        ];
+
+        console.log("事件添加");
+        video.addEventListener("abort", abort);
         actionArr.forEach(x => {
-            video.addEventListener(x, function (e) {
-                console.log(e);
-                chrome.runtime.sendMessage(
-                    {
-                        greeting: "这里是inject.js",
-                        from: "player",
-                        action: x,
-                        curTime: video.currentTime
-                    },
-                    (response) => {
-                        console.log(response);
-                    }
-                );
-            });
+            addEventListenerToVideo(x);
         });
+
     }
 
     chrome.runtime.onMessage.addListener((message, sender, respond) => {

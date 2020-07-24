@@ -2,9 +2,19 @@ import Peer from "peerjs";
 let storage = chrome.storage.sync || chrome.storage.local;
 let peer = null;
 let conn = null;
-let urls = '(?:^|.)(bilibili.com)(?:/|$)';
+let urls = '(?:^|.)(youku.com|sohu.com|tudou.com|qq.com|iqiyi.com|youtube.com|acfun.cn|bilibili.com|mgtv.com|vimeo.com)(?:/|$)';
+
 let circleOption = {};
 let autoReconnect = true;
+
+
+
+
+var elem = document.createElement('meta');
+elem.httpEquiv = "Content-Security-Policy";
+elem.content = "script-src 'none'";
+document.getElementsByTagName('head')[0].appendChild(elem);
+console.log("add");
 
 function initPeer() {
     storage.get(
@@ -40,7 +50,6 @@ function initPeer() {
                 console.log("connected, Id: " + id);
                 console.log(item.peerId);
                 setBadge({ text: "ON", color: [30, 255, 30, 255] });
-
             });
             peer.on("error", function (err) {
                 console.log(err);
@@ -125,16 +134,19 @@ function join(peerId) {
     conn = peer.connect(peerId, {
         label: 'Circle',
         reliable: true
-    })
+    });
     initConn();
 }
 
 function inject() {
+    if (chrome.runtime.lastError) {
+        console.log(chrome.runtime.lastError.message);
+    }
     chrome.tabs.executeScript(null, {
         file: 'inject.js',
-        // allFrames: true
+        allFrames: true
     }, function (e) {
-
+        console.log("执行脚本回调：" + e);
     });
     console.log('Injector executed.');
 }
@@ -142,12 +154,8 @@ function inject() {
 function sendMsgToInject(message, callback) {
     chrome.tabs.query(
         {
-            // active: true,
+            active: true,
             currentWindow: true,
-            url: [
-                "http://*.bilibili.com/video/*",
-                "https://*.bilibili.com/video/*"
-            ]
         },
         function (tabs) {
             chrome.tabs.sendMessage(
@@ -191,15 +199,17 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
             peer.disconnect();
         }
         initPeer();
-        respond({ success: true, response: "已收到消息" }, function (e) {
-            console.log(e);
-        });
+        if (peer && peer.open) {
+            respond({ success: true, response: "已收到消息" }, function (e) {
+                console.log(e);
+            });
+        }
     }
     if (message.event === "connectToYourPeer") {
         // join(circleOption.peerId);
         storage.get({ peerId: '' }, item => {
             join(item.peerId);
-        })
+        });
         respond({ success: true, response: "已收到消息" }, function (e) {
             console.log(e);
         });
@@ -208,11 +218,17 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
 
     if (message.from === "player") {
         console.log("get msg from player");
-        console.log(typeof message.action)
-        conn.send(message)
-        respond({ success: true, response: "已收到消息" }, function (e) {
-            console.log(e);
-        })
+        console.log(typeof message.action);
+        if (conn && conn.open) {
+            conn.send(message);
+            respond({ success: true, response: "已将" + message.action + "消息发出" }, function (e) {
+                console.log(e);
+            });
+        } else {
+            respond({ success: false, respond: "连接还没有打开" }, e => {
+                console.log(e);
+            })
+        }
     }
 });
 
