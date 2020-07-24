@@ -4,8 +4,7 @@ let peerId = get("peerId");
 let tips = document.getElementsByClassName("tip");
 let tip0 = tips[0];
 let tip1 = tips[1];
-console.log(tip0);
-console.log(tip1);
+
 
 function get(id) {
     return document.getElementById(id);
