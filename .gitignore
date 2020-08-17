@@ -1,3 +1,5 @@
 node_modules/
-*.xmind
-src.pem
+./*.xmind
+./*.pem
+./*.crx
+./*.rar
