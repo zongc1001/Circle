@@ -40,6 +40,17 @@ function connectToPeerServer() {
                 console.log(response);
                 if (response.success) {
                     document.body.classList.add("toleft");
+                } else {
+                    let t =  get("connectToPeerServer");
+                    console.log(t);
+                    t.innerText = "Connect faild";
+                    t.style.backgroundColor = "red";
+                    
+                    setTimeout(function() {
+                        t.innerText = "Sign in";
+                        t.style.backgroundColor = "#E6E6E6";
+                    }, 500)
+
                 }
             });
         }
@@ -67,6 +78,7 @@ function connectToYourPeer() {
 
 
 chrome.runtime.sendMessage({ event: "haslogin" }, response => {
+    console.log(response)
     if (response.haslogin) {
         document.body.classList.add("moveToLeft");
     } else {
