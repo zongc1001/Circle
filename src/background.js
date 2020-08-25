@@ -1,7 +1,7 @@
-import Peer from 'peerjs'
-let storage = chrome.storage.sync || chrome.storage.local
-let peer = null
-let conn = null
+import Peer from 'peerjs';
+let storage = chrome.storage.sync || chrome.storage.local;
+let peer = null;
+let conn = null;
 let urls =
   '(?:^|.)(youku.com|sohu.com|tudou.com|qq.com|iqiyi.com|youtube.com|acfun.cn|bilibili.com/video|mgtv.com|vimeo.com)(?:/|$)'
 
@@ -41,9 +41,9 @@ function initPeer (callback) {
 
       peer.on('open', id => {
         console.log('connected, Id: ' + id)
-        console.log(item.peerId)
-        setPopupLogin(true)
-        doCallback()
+        console.log(item.peerId);
+        setPopupLogin(true);
+        doCallback();
       })
       peer.on('error', function (err) {
         console.log(err)
