@@ -3,7 +3,7 @@ let storage = chrome.storage.sync || chrome.storage.local;
 let peer = null;
 let conn = null;
 let urls =
-  '(?:^|.)(youku.com|sohu.com|tudou.com|qq.com|iqiyi.com|youtube.com|acfun.cn|bilibili.com/video|mgtv.com|vimeo.com)(?:/|$)'
+  '(?:^|.)(youku.com|sohu.com|tudou.com|qq.com|iqiyi.com|youtube.com|acfun.cn|bilibili.com|mgtv.com|vimeo.com)(?:/|$)'
 
 function initPeer(resolve, reject) {
   // function doCallback() {

@@ -103,7 +103,7 @@
             console.log("get msg from peer, the sender is " + sender);
             if (!video) return;
             if (message.curTime &&
-                Math.abs(message.curTime - video.currentTime) > 1
+                Math.abs(message.curTime - video.currentTime) > .8
             ) {
                 video.currentTime = message.curTime;
             }
