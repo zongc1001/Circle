@@ -38,20 +38,7 @@ function connectToPeerServer() {
             }
             chrome.runtime.sendMessage({ event: 'connectToPeerServer' }, response => {
                 console.log(response);
-                if (response.success) {
-                    document.body.classList.add("toleft");
-                } else {
-                    let t =  get("connectToPeerServer");
-                    console.log(t);
-                    t.innerText = "Connect faild";
-                    t.style.backgroundColor = "red";
-                    
-                    setTimeout(function() {
-                        t.innerText = "Sign in";
-                        t.style.backgroundColor = "#E6E6E6";
-                    }, 500)
-
-                }
+                get("connectToPeerServer").innerHTML = "<div class='button'></div>"
             });
         }
     );
@@ -76,7 +63,6 @@ function connectToYourPeer() {
     );
 }
 
-
 chrome.runtime.sendMessage({ event: "haslogin" }, response => {
     console.log(response)
     if (response.haslogin) {
@@ -91,9 +77,26 @@ on("connectToYourPeer", "click", connectToYourPeer);
 restore();
 
 window.methodExpose = {
-    setLogin: function(value) {
+    setLogin: function (value) {
         storage.set({
             login: value
         });
+    },
+    loginSuccess: function () {
+        document.body.classList.add("toleft");
+        //还需完善登录逻辑，把按钮内部的html改回文字
+    },
+    loginFail: function () {
+        let t = get("connectToPeerServer");
+        console.log(t);
+        t.innerText = "Connect faild";
+        t.classList.add("fail-button");
+
+        setTimeout(function () {
+            t.innerText = "Sign in";
+            t.style.backgroundColor = "#E6E6E6";
+            t.classList.remove("fail-button");
+        }, 500)
     }
+
 };

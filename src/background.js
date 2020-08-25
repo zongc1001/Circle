@@ -5,12 +5,12 @@ let conn = null;
 let urls =
   '(?:^|.)(youku.com|sohu.com|tudou.com|qq.com|iqiyi.com|youtube.com|acfun.cn|bilibili.com/video|mgtv.com|vimeo.com)(?:/|$)'
 
-function initPeer (callback) {
-  function doCallback () {
-    if (typeof callback === 'function') {
-      callback()
-    }
-  }
+function initPeer(resolve, reject) {
+  // function doCallback() {
+  //   if (typeof callback === 'function') {
+  //     successCallback()
+  //   }
+  // }
   storage.get(
     {
       myId: '',
@@ -43,7 +43,7 @@ function initPeer (callback) {
         console.log('connected, Id: ' + id)
         console.log(item.peerId);
         setPopupLogin(true);
-        doCallback();
+        resolve();
       })
       peer.on('error', function (err) {
         console.log(err)
@@ -69,7 +69,8 @@ function initPeer (callback) {
       peer.on('disconnected', function () {
         console.log('事件: disconnected')
         setBadge({ text: 'OFF', color: [255, 30, 30, 255] })
-        setPopupLogin(false)
+        setPopupLogin(false);
+        reject();
         // if (autoReconnect) {
         //     setTimeout(() => {
         //         console.log("reconneting...");
@@ -87,7 +88,7 @@ function initPeer (callback) {
   )
 }
 
-function initConn () {
+function initConn() {
   // if(conn !== null) return;
   console.log('initConn')
   conn.on('open', function () {
@@ -131,7 +132,7 @@ function initConn () {
   })
 }
 
-function join (peerId) {
+function join(peerId) {
   conn = peer.connect(peerId, {
     label: 'Circle',
     reliable: true
@@ -139,7 +140,7 @@ function join (peerId) {
   initConn()
 }
 
-function inject () {
+function inject() {
   if (chrome.runtime.lastError) {
     console.log(chrome.runtime.lastError.message)
   }
@@ -156,16 +157,41 @@ function inject () {
   console.log('Injector executed.')
 }
 
-function setPopupLogin (login) {
+function getPopup() {
   let views = chrome.extension.getViews({ type: 'popup' })
   if (views.length > 0) {
-    console.log(views[0])
-    let popup = views[0]
-    popup.methodExpose.setLogin(login)
+    console.log(views[0]);
+    return views[0];
+  } else {
+    return null;
   }
 }
 
-function sendMsgToInject (message) {
+
+
+function setPopupLogin(login) {
+  let popup = getPopup();
+  if (popup) {
+    popup.methodExpose.setLogin(login);
+  }
+}
+
+function popupLoginSuccess() {
+  let popup = getPopup();
+  if (popup) {
+    popup.methodExpose.loginSuccess();
+  }
+}
+
+
+function popupLoginFail() {
+  let popup = getPopup();
+  if (popup) {
+    popup.methodExpose.loginFail();
+  }
+}
+
+function sendMsgToInject(message) {
   chrome.tabs.query(
     {
       active: true,
@@ -179,8 +205,10 @@ function sendMsgToInject (message) {
   )
 }
 
+
+
 //设置图标的颜色和字体
-function setBadge (option) {
+function setBadge(option) {
   if (option.color) {
     chrome.browserAction.setBadgeBackgroundColor({ color: option.color })
   }
@@ -204,21 +232,28 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
 
   if (message.event === 'connectToPeerServer') {
     // join(circleOption.peerId);
-    if (peer && peer.open) {
+    if (peer && peer.id) {
       peer.disconnect()
     }
 
-    initPeer();
-    if(peer && peer.open) {
-        respond({ success: true, response: '连接服务器成功' }, function (e) {
-            console.log(e)
-          })
-    } else {
-        respond({ success: false, response: '连接服务器失败' }, function (e) {
-            console.log(e)
-          })
-    }
-    
+    // initPeer();
+    // console.log("peer: ", peer);
+    // if (peer) {
+    //   console.log("peer.id: ", peer.id);
+    // }
+
+    respond({ success: true, response: '已请求连接服务器' }, function (e) {
+      console.log(e)
+    })
+
+    let t = new Promise(initPeer);
+    t.then(function () {
+      popupLoginSuccess();
+    }).catch(function () {
+      popupLoginFail();
+    })
+
+
   }
   if (message.event === 'connectToYourPeer') {
     // join(circleOption.peerId);
@@ -249,8 +284,8 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
     }
   }
   if (message.event === 'haslogin') {
-    
-    if (peer && peer.open) {
+
+    if (peer && peer.id) {
       respond({ haslogin: true })
     } else {
       respond({ haslogin: false })
