@@ -113,13 +113,13 @@
         if (message.from === "peer") {
             console.log("get msg from peer, the sender is " + sender);
             if (!video) return;
-            if (message.curTime &&
-                Math.abs(message.curTime - video.currentTime) > 1
-            ) {
-                video.currentTime = message.curTime;
-            }
             switch (message.action) {
                 case "playing":
+                    if (message.curTime &&
+                        Math.abs(message.curTime - video.currentTime) > 1
+                    ) {
+                        video.currentTime = message.curTime;
+                    }
                     video.play();
                     break;
                 case "pause":
