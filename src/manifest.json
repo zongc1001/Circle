@@ -14,7 +14,6 @@
         "default_title": "Circle"
     },
 
-    "options_page": "options.html",
 
     "icons": {
         "16": "./asset/img/icon.png",
@@ -67,7 +66,6 @@
         "popup.js",
         "dist/background.js",
         "inject.js",
-        "options.js",
         "_generated_background_page.html"
     ]
 

@@ -8,9 +8,6 @@
         "playing"
     ];
 
-
-
-
     function loadScript(url, callback) {
         function doCallback() {
             if (typeof callback === 'function') {
@@ -65,7 +62,8 @@
                     greeting: "这里是inject.js",
                     from: "player",
                     action: x,
-                    curTime: video.currentTime
+                    curTime: video.currentTime,
+                    href: window.location.href,
                 },
                 (response) => {
                     console.log(response);
@@ -83,17 +81,18 @@
             });
             video.addEventListener("abort", abort);
         }, 500);
-
     }
 
-    console.log(video);
-    if (video) {
 
-        console.log("事件添加");
+
+    if (video) {
+        console.log(video);
+        console.log("video已捕获");
         video.addEventListener("abort", abort);
         actionArr.forEach(x => {
             addEventListenerToVideo(x);
         });
+        console.log(window.location.href);
 
     }
 

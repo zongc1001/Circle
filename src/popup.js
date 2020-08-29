@@ -98,5 +98,5 @@ window.methodExpose = {
             t.classList.remove("fail-button");
         }, 500)
     }
-
+    
 };

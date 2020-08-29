@@ -51,8 +51,8 @@ body {
     width: 1em;
     height: 1em;
     margin-right: 0.5em;
-    color: red;
-    border: 1px solid red;
+    color: lime;
+    border: 1px solid lime;
     border-radius: 50%;
     vertical-align: -10%;
     clip-path: polygon(0% 0%, 100% 0%, 100% 30%, 0% 30%);
@@ -143,4 +143,13 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
+}
+
+.address {
+    margin: .0 1rem;
+    margin-bottom: .3rem;
+}
+
+.empty-address {
+    cursor: not-allowed;
 }

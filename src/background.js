@@ -98,6 +98,7 @@ function initConn() {
   })
 
   conn.on('data', function (data) {
+    console.log("data:", data);
     switch (data.action) {
       case 'playing':
         console.log('data received > playing')
@@ -269,6 +270,7 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
   if (message.from === 'player') {
     console.log('get msg from player')
     console.log(typeof message.action)
+
     if (conn && conn.open) {
       conn.send(message)
       respond(
