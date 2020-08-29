@@ -64,13 +64,8 @@ function connectToYourPeer() {
 }
 
 function getBack() {
-    let views = chrome.extension.getViews({ type: 'background' })
-    if (views.length > 0) {
-        console.log(views[0]);
-        return views[0];
-    } else {
-        return null;
-    }
+    return chrome.extension.getBackgroundPage();
+    
 }
 
 function initAddress() {
