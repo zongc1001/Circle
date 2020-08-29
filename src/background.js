@@ -104,7 +104,6 @@ function initConn() {
       address = data.address;
       popUpUpdateAddress();
     }
-    
     switch (data.action) {
       case 'playing':
         console.log('data received > playing')
