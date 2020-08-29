@@ -4,6 +4,7 @@ let peer = null;
 let conn = null;
 let urls =
   '(?:^|.)(youku.com|sohu.com|tudou.com|qq.com|iqiyi.com|youtube.com|acfun.cn|bilibili.com|mgtv.com|vimeo.com)(?:/|$)'
+let address = null;
 
 function initPeer(resolve, reject) {
   // function doCallback() {
@@ -99,6 +100,11 @@ function initConn() {
 
   conn.on('data', function (data) {
     console.log("data:", data);
+    if(address !== data.address) {
+      address = data.address;
+      popUpUpdateAddress();
+    }
+    
     switch (data.action) {
       case 'playing':
         console.log('data received > playing')
@@ -189,6 +195,13 @@ function popupLoginFail() {
   let popup = getPopup();
   if (popup) {
     popup.methodExpose.loginFail();
+  }
+}
+
+function popUpUpdateAddress() {
+  let popup = getPopup();
+  if (popup) {
+    popup.methodExpose.updateAddress(address);
   }
 }
 
@@ -302,3 +315,10 @@ chrome.webNavigation.onCompleted.addListener(inject, {
     }
   ]
 })
+
+
+window.methodExpose = {
+  getAddress: function() {
+    return address;
+  }
+}

@@ -63,7 +63,7 @@
                     from: "player",
                     action: x,
                     curTime: video.currentTime,
-                    href: window.location.href,
+                    address: window.location.href,
                 },
                 (response) => {
                     console.log(response);
@@ -83,12 +83,15 @@
         }, 500);
     }
 
-
+    function canplay(e) {
+        console.log(e);
+    }
 
     if (video) {
         console.log(video);
         console.log("video已捕获");
         video.addEventListener("abort", abort);
+        video.addEventListener("canplay", canplay);
         actionArr.forEach(x => {
             addEventListenerToVideo(x);
         });

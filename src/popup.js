@@ -63,6 +63,30 @@ function connectToYourPeer() {
     );
 }
 
+function getBack() {
+    let views = chrome.extension.getViews({ type: 'background' })
+    if (views.length > 0) {
+        console.log(views[0]);
+        return views[0];
+    } else {
+        return null;
+    }
+}
+
+function initAddress() {
+    let back = getBack();
+    if(back) {
+        let address = back.methodExpose.getAddress();
+        if(address) {
+            let elem = get("remoteVideo");
+            elem.innerText = address;
+            elem.setAttribute("href", address);
+        }
+    }
+}
+
+
+
 chrome.runtime.sendMessage({ event: "haslogin" }, response => {
     console.log(response)
     if (response.haslogin) {
@@ -75,6 +99,8 @@ chrome.runtime.sendMessage({ event: "haslogin" }, response => {
 on("connectToPeerServer", "click", connectToPeerServer);
 on("connectToYourPeer", "click", connectToYourPeer);
 restore();
+
+
 
 window.methodExpose = {
     setLogin: function (value) {
@@ -97,6 +123,13 @@ window.methodExpose = {
             t.style.backgroundColor = "#E6E6E6";
             t.classList.remove("fail-button");
         }, 500)
+    },
+    updateAddress: function (address) {
+
+        let elem = get("remoteVideo");
+        elem.innerText = address;
+        elem.setAttribute("href", address);
     }
-    
 };
+
+
