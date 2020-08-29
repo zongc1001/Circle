@@ -1,7 +1,7 @@
 # Circle
 同步两个浏览器的视频播放行为
 
-## 使用方法
+### 安装方法
 
 1. 把项目下载下来
 
@@ -15,4 +15,20 @@
 
 4. 选择解压出来的src文件夹
 
-   ![image-20200829180437086](https://github.com/zongc1001/Circle/blob/master/img/image-20200829180355791.png)
+   ![image-20200829180437086](https://github.com/zongc1001/Circle/blob/5fd71a7d43cd6792dbfb199413bb6d715a895406/img/image-20200829180437086.png)
+
+### 使用方法
+
+1. 安装好了以后，点击插件的图标，设置一个id，尽量设一个不大会和别人重复的（比如你的名字缩写+生日这样的组合：zc1024），点击sign in
+
+   ![image-20200829183347982](https://github.com/zongc1001/Circle/blob/master/img/image-20200829183347982.png)
+
+2. 登录成功后，输入你的小伙伴的id，点击connect就可以与你的小伙伴连接了。最下方的链接是你的小伙伴最后加载的一个视频页面的url，你可以直接在这里跳转到和小伙伴同样的页面。
+
+   ![image-20200829183527151](https://github.com/zongc1001/Circle/blob/master/img/image-20200829183527151.png)
+
+3. 连接成功就可以开始看视频了，B站的支持应该是最好的，脚本会在标签页的小圈圈停止转动后植入。植入完成以后，对方将可以看到你正在看的视频页面的url，并且同步功能将开启。
+
+   ![image-20200829184054654](https://github.com/zongc1001/Circle/blob/master/img/image-20200829183527151.png)
+
+4. 视频加载完成以后，对方可以看到你所在页面的url，视频的播放和暂停将会被同步至对方的页面。
