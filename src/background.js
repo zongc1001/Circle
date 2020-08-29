@@ -93,12 +93,14 @@ function initConn() {
   // if(conn !== null) return;
   console.log('initConn')
   conn.on('open', function () {
+    console.log("conn open");
     setBadge({ text: 'ON', color: [30, 255, 30, 255] })
 
     console.log('Connected to: ' + conn.peer)
   })
 
   conn.on('data', function (data) {
+    console.log("conn data");
     console.log("data:", data);
     if(address !== data.address) {
       address = data.address;
@@ -298,7 +300,6 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
     }
   }
   if (message.event === 'haslogin') {
-
     if (peer && peer.id) {
       respond({ haslogin: true })
     } else {
@@ -321,3 +322,5 @@ window.methodExpose = {
     return address;
   }
 }
+
+setBadge({text: "", color: [255,255,255,0]});
