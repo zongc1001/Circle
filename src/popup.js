@@ -99,7 +99,7 @@ chrome.runtime.sendMessage({ event: "haslogin" }, response => {
 on("connectToPeerServer", "click", connectToPeerServer);
 on("connectToYourPeer", "click", connectToYourPeer);
 restore();
-
+initAddress();
 
 
 window.methodExpose = {
@@ -127,6 +127,7 @@ window.methodExpose = {
     updateAddress: function (address) {
 
         let elem = get("remoteVideo");
+        console.log(address);
         elem.innerText = address;
         elem.setAttribute("href", address);
     }
