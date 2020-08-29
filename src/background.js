@@ -48,7 +48,7 @@ function initPeer(resolve, reject) {
       })
       peer.on('error', function (err) {
         console.log(err)
-        setBadge({ text: 'OFF', color: [255, 30, 30, 255] })
+        setBadge({ text: 'ERR', color: [255, 30, 30, 255] })
       })
       peer.on('connection', c => {
         if (conn && conn.open) {
