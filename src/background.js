@@ -62,7 +62,7 @@ function initPeer(resolve, reject) {
         }
         conn = c
         initConn()
-        setBadge({ text: 'ON', color: [30, 255, 30, 255] })
+        // setBadge({ text: 'ON', color: [30, 255, 30, 255] })
 
         console.log('Connected to: ' + conn.peer)
       })
@@ -95,7 +95,7 @@ function initConn() {
   conn.on('open', function () {
     console.log("conn open");
     setBadge({ text: 'ON', color: [30, 255, 30, 255] })
-
+    // getPopup().methodExpose.connectSuccess();
     console.log('Connected to: ' + conn.peer)
   })
 
@@ -204,6 +204,10 @@ function popUpUpdateAddress() {
   if (popup) {
     popup.methodExpose.updateAddress(address);
   }
+}
+
+function callPopup() {
+
 }
 
 function sendMsgToInject(message) {
@@ -323,4 +327,4 @@ window.methodExpose = {
   }
 }
 
-setBadge({text: "", color: [255,255,255,0]});
+setBadge({text: "OFF", color: [200,200, 0, 255]});

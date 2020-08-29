@@ -125,7 +125,14 @@ window.methodExpose = {
         console.log(address);
         elem.innerText = address;
         elem.setAttribute("href", address);
-    }
+    },
+    closeWindow() {
+        window.close();
+    },
+    connectSuccess: function(peer) {
+        let elem = get("peerIdTip");
+        elem.innerText = "You have connected to " + peer + " .";
+    },
 };
 
 
