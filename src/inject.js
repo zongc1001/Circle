@@ -6,7 +6,6 @@
     let actionArr = [
         "pause",
         "playing",
-        "loadeddata ",
     ];
 
     function loadScript(url, callback) {
@@ -84,11 +83,23 @@
         }, 500);
     }
 
-    
+    function sendAddress() {
+        chrome.runtime.sendMessage(
+            {
+                greeting: "这里是inject.js",
+                from: "player",
+                address: window.location.href,
+            },
+            (response) => {
+                console.log(response);
+            }
+        );
+    }
 
     if (video) {
         console.log(video);
         console.log("video已捕获");
+        sendAddress();
         video.addEventListener("abort", abort);
         actionArr.forEach(x => {
             addEventListenerToVideo(x);
