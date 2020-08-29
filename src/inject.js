@@ -5,7 +5,8 @@
     let video = document.getElementsByTagName("video")[0];
     let actionArr = [
         "pause",
-        "playing"
+        "playing",
+        "canplay",
     ];
 
     function loadScript(url, callback) {
@@ -83,15 +84,12 @@
         }, 500);
     }
 
-    function canplay(e) {
-        console.log(e);
-    }
+    
 
     if (video) {
         console.log(video);
         console.log("video已捕获");
         video.addEventListener("abort", abort);
-        video.addEventListener("canplay", canplay);
         actionArr.forEach(x => {
             addEventListenerToVideo(x);
         });
