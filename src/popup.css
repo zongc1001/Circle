@@ -149,7 +149,3 @@ body {
     margin: .0 1rem;
     margin-bottom: .3rem;
 }
-
-.empty-address {
-    cursor: not-allowed;
-}
