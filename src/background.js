@@ -142,7 +142,7 @@ function inject() {
       allFrames: true
     },
     function (e) {
-      console.log('执行脚本回调：' + e)
+      console.log('脚本已注入：' + e)
     }
   )
   console.log('Injector executed.')
@@ -180,9 +180,14 @@ function sendMsgToInject(message) {
       currentWindow: true
     },
     function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, message, function (response) {
-        console.log(response)
-      })
+      if(tabs.length > 0) {
+        chrome.tabs.sendMessage(tabs[0].id, message, function (response) {
+          console.log(response)
+        })
+      } else {
+        console.log("不在视频页面");
+      }
+      
     }
   )
 }
@@ -217,11 +222,6 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
       peer.disconnect()
     }
 
-    // initPeer();
-    // console.log("peer: ", peer);
-    // if (peer) {
-    //   console.log("peer.id: ", peer.id);
-    // }
 
     respond({ success: true, response: '已请求连接服务器' }, function (e) {
       console.log(e)
