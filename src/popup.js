@@ -78,6 +78,8 @@ function initAddress() {
             elem.innerText = title;
             elem.setAttribute("href", address);
         }
+    } else {
+        console.log("back 页面未获取");
     }
 }
 
