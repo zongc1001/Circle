@@ -5,8 +5,8 @@
     let video = document.getElementsByTagName("video")[0];
     let actionArr = [
         "pause",
-        "playing",
-        "timeupdate",
+        "play",
+        "seeked",
     ];
 
     function loadScript(url, callback) {
