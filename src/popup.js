@@ -72,6 +72,7 @@ function initAddress() {
     let back = getBack();
     if(back) {
         let [address, title] = back.methodExpose.getAddress();
+        console.log("address, title:", address, title);
         if(address && title) {
             let elem = get("remoteVideo");
             elem.innerText = title;

@@ -217,7 +217,6 @@ function setBadge(option) {
 }
 
 chrome.runtime.onMessage.addListener((message, sender, respond) => {
-  console.log(message)
   if (message.event === 'optionschange') {
     console.log('Options changed and re-init...')
     peer.disconnect()
@@ -263,7 +262,7 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
   }
 
   if (message.from === 'player') {
-    console.log('get msg from player')
+    console.log('get msg from player:', message)
     if (peer && peer.id) {
       if (conn && conn.open) {
         conn.send(message)
