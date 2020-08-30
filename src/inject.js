@@ -64,6 +64,7 @@
                     action: x,
                     curTime: video.currentTime,
                     address: window.location.href,
+                    title: document.title,
                 },
                 (response) => {
                     console.log(response);
@@ -89,6 +90,7 @@
                 greeting: "这里是inject.js",
                 from: "player",
                 address: window.location.href,
+                title: document.title,
             },
             (response) => {
                 console.log(response);

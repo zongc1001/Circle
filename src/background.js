@@ -5,7 +5,7 @@ let conn = null;
 let urls =
   '(?:^|.)(youku.com|sohu.com|tudou.com|qq.com|iqiyi.com|youtube.com|acfun.cn|bilibili.com|mgtv.com|vimeo.com|ixigua.com)(?:/|$)'
 let address = null;
-
+let title = null;
 function initPeer(resolve, reject) {
   // function doCallback() {
   //   if (typeof callback === 'function') {
@@ -43,7 +43,7 @@ function initPeer(resolve, reject) {
       peer.on('open', id => {
         console.log('connected, Id: ' + id)
         console.log(item.peerId);
-        setPopupLogin(true);
+        callPopup("popupLogin", true);
         resolve();
       })
       peer.on('error', function (err) {
@@ -70,7 +70,7 @@ function initPeer(resolve, reject) {
       peer.on('disconnected', function () {
         console.log('事件: disconnected')
         setBadge({ text: 'OFF', color: [255, 30, 30, 255] })
-        setPopupLogin(false);
+        callPopup("setLogin", false);
         reject();
         // if (autoReconnect) {
         //     setTimeout(() => {
@@ -82,7 +82,7 @@ function initPeer(resolve, reject) {
 
       peer.on('close', function (err) {
         console.log('事件: close')
-        setPopupLogin(false)
+        callPopup("setLogin", false);
         setBadge({ text: 'OFF', color: [255, 30, 30, 255] })
       })
     }
@@ -104,8 +104,10 @@ function initConn() {
     console.log("data:", data);
     if(address !== data.address) {
       address = data.address;
-      popUpUpdateAddress();
+      title = data.title;
+      callPopup("updateAddress", address, title);
     }
+    
     switch (data.action) {
       case 'playing':
         console.log('data received > playing')
@@ -174,40 +176,20 @@ function getPopup() {
     return null;
   }
 }
+/**
+ * 
+ * @param {String} method 
+ * @param {*} args 
+ */
 
-
-
-function setPopupLogin(login) {
+function callPopup(method, ...args) {
   let popup = getPopup();
+  console.log("args:", args);
   if (popup) {
-    popup.methodExpose.setLogin(login);
+    popup.methodExpose[method](args);
+  } else {
+    console.log("popup没有打开");
   }
-}
-
-function popupLoginSuccess() {
-  let popup = getPopup();
-  if (popup) {
-    popup.methodExpose.loginSuccess();
-  }
-}
-
-
-function popupLoginFail() {
-  let popup = getPopup();
-  if (popup) {
-    popup.methodExpose.loginFail();
-  }
-}
-
-function popUpUpdateAddress() {
-  let popup = getPopup();
-  if (popup) {
-    popup.methodExpose.updateAddress(address);
-  }
-}
-
-function callPopup() {
-
 }
 
 function sendMsgToInject(message) {
@@ -267,12 +249,10 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
 
     let t = new Promise(initPeer);
     t.then(function () {
-      popupLoginSuccess();
+      callPopup("loginSuccess");
     }).catch(function () {
-      popupLoginFail();
+      callPopup("loginFail");
     })
-
-
   }
   if (message.event === 'connectToYourPeer') {
     // join(circleOption.peerId);

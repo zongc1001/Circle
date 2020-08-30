@@ -119,11 +119,10 @@ window.methodExpose = {
             t.classList.remove("fail-button");
         }, 500)
     },
-    updateAddress: function (address) {
-
+    updateAddress: function (address, title) {
         let elem = get("remoteVideo");
         console.log(address);
-        elem.innerText = address;
+        elem.innerText = title;
         elem.setAttribute("href", address);
     },
     closeWindow() {
