@@ -279,7 +279,6 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
     storage.get({ peerId: '' }, item => {
       join(item.peerId)
     })
-
     respond({ success: true, response: 'peer连接成功' }, function (e) {
       console.log(e)
     })
@@ -287,21 +286,26 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
 
   if (message.from === 'player') {
     console.log('get msg from player')
-    console.log(typeof message.action)
-
-    if (conn && conn.open) {
-      conn.send(message)
-      respond(
-        { success: true, response: '已将' + message.action + '消息发出' },
-        function (e) {
+    if(peer && peer.id) {
+      if (conn && conn.open) {
+        conn.send(message)
+        respond(
+          { success: true, response: '已将' + message.action + '消息发出' },
+          function (e) {
+            console.log(e)
+          }
+        )
+      } else {
+        respond({ success: false, respond: '连接还没有打开' }, e => {
           console.log(e)
-        }
-      )
+        })
+      }
     } else {
-      respond({ success: false, respond: '连接还没有打开' }, e => {
+      respond({ success: false, respond: '还未登录' }, e => {
         console.log(e)
       })
     }
+    
   }
   if (message.event === 'haslogin') {
     if (peer && peer.id) {
