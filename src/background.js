@@ -105,28 +105,11 @@ function initConn() {
     address = data.address;
     title = data.title;
     callPopup("updateAddress", address, title);
-
-    switch (data.action) {
-      case 'playing':
-        console.log('data received > playing')
-        sendMsgToInject({
-          from: 'peer',
-          action: data.action,
-          curTime: data.curTime
-        })
-        break
-      case 'pause':
-        console.log('data received > pause')
-        sendMsgToInject({
-          from: 'peer',
-          action: data.action,
-          curTime: data.curTime
-        })
-        break
-      default:
-        console.log('data received: ' + data)
-        break
-    }
+    sendMsgToInject({
+      from: 'peer',
+      action: data.action,
+      curTime: data.curTime
+    })
   })
 
   conn.on('close', function () {
