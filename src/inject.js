@@ -122,9 +122,11 @@
                         video.currentTime = message.curTime;
                     }
                     video.play();
+                    console.log("视频已播放, curTime:", video.currentTime);
                     break;
                 case "pause":
                     video.pause();
+                    console.log("视频已暂停, curTime:", video.currentTime);
                     break;
                 case "seeked":
                     if (message.curTime &&
@@ -132,6 +134,8 @@
                     ) {
                         video.currentTime = message.curTime;
                     }
+                    console.log("视频已跳转, curTime:", video.currentTime);
+
                 default:
                     console.log("无法处理的消息: " + message);
                     break;
