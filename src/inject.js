@@ -80,7 +80,7 @@
                 addEventListenerToVideo(x);
             });
             video.addEventListener("abort", abort);
-        }, 500);
+        }, 1000);
     }
 
     function sendAddress() {

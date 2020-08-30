@@ -46,7 +46,10 @@
         "http://*.mgtv.com/*",
         "https://*.mgtv.com/*",
         "http://*.vimeo.com/*",
-        "https://*.vimeo.com/*"
+        "https://*.vimeo.com/*",
+        "http://*.ixigua.com/*",
+        "https://*.ixigua.com/*"
+        
     ],
     "background": {
         "scripts": ["./dist/background.js"],
