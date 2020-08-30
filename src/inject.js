@@ -122,9 +122,7 @@
     //重写捕获video的逻辑，如果video为空应该在一段时间后再去获取
     if (video) {
         init();
-    } else {
-        getVideo();
-    }
+    } 
 
     chrome.runtime.onMessage.addListener((message, sender, respond) => {
         console.log(message);
