@@ -307,7 +307,7 @@ chrome.webNavigation.onCompleted.addListener(inject, {
 
 window.methodExpose = {
   getAddress: function() {
-    return address;
+    return {address, title};
   }
 }
 
