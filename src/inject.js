@@ -115,7 +115,7 @@
             console.log("get msg from peer, the sender is " + sender);
             if (!video) return;
             switch (message.action) {
-                case "playing":
+                case "play":
                     if (message.curTime &&
                         Math.abs(message.curTime - video.currentTime) > 1
                     ) {
@@ -126,7 +126,7 @@
                 case "pause":
                     video.pause();
                     break;
-                case "timeupdate":
+                case "seeked":
                     if (message.curTime &&
                         Math.abs(message.curTime - video.currentTime) > 1
                     ) {
