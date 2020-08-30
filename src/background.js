@@ -43,7 +43,7 @@ function initPeer(resolve, reject) {
       peer.on('open', id => {
         console.log('connected, Id: ' + id)
         console.log(item.peerId);
-        callPopup("popupLogin", true);
+        callPopup("setLogin", true);
         resolve();
       })
       peer.on('error', function (err) {
