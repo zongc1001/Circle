@@ -6,7 +6,7 @@
     let actionArr = [
         "pause",
         "playing",
-        "seeked",
+        // "seeked",
     ];
 
     function loadScript(url, callback) {
