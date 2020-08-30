@@ -186,7 +186,7 @@ function callPopup(method, ...args) {
   let popup = getPopup();
   console.log("args:", args);
   if (popup) {
-    popup.methodExpose[method](args);
+    return popup.methodExpose[method](...args);
   } else {
     console.log("popup没有打开");
   }
@@ -307,8 +307,8 @@ chrome.webNavigation.onCompleted.addListener(inject, {
 
 window.methodExpose = {
   getAddress: function() {
-    return {address, title};
+    return [address, title];
   }
 }
 
-setBadge({text: "OFF", color: [200,200, 0, 255]});
+setBadge({text: "OFF", color: [240,240, 0, 255]});

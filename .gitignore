@@ -3,3 +3,5 @@ node_modules/
 ./*.pem
 ./*.crx
 *.rar
+
+test/
