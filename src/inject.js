@@ -89,6 +89,7 @@
             {
                 greeting: "这里是inject.js",
                 from: "player",
+                action: "new url",
                 address: window.location.href,
                 title: document.title,
             },
