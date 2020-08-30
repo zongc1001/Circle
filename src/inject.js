@@ -5,7 +5,7 @@
     let video = document.getElementsByTagName("video")[0];
     let actionArr = [
         "pause",
-        "play",
+        "playing",
         "seeked",
     ];
 
@@ -118,7 +118,7 @@
             console.log("get msg from peer, the sender is " + sender);
             if (!video) return;
             switch (message.action) {
-                case "play":
+                case "playing":
                     if (message.curTime &&
                         Math.abs(message.curTime - video.currentTime) > 1
                     ) {
@@ -138,7 +138,6 @@
                         video.currentTime = message.curTime;
                     }
                     console.log("视频已跳转, curTime:", video.currentTime);
-
                 default:
                     console.log("无法处理的消息: " + message);
                     break;
