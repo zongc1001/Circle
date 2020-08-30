@@ -72,7 +72,7 @@ function initAddress() {
     let back = getBack();
     if(back) {
         let [address, title] = back.methodExpose.getAddress();
-        if(address) {
+        if(address && title) {
             let elem = get("remoteVideo");
             elem.innerText = title;
             elem.setAttribute("href", address);
