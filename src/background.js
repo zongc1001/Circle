@@ -99,15 +99,13 @@ function initConn() {
     console.log('Connected to: ' + conn.peer)
   })
 
-  conn.on('data', function (data) {
+  conn.on("data", function (data) {
     console.log("conn data");
     console.log("data:", data);
-    if(address !== data.address) {
-      address = data.address;
-      title = data.title;
-      callPopup("updateAddress", address, title);
-    }
-    
+    address = data.address;
+    title = data.title;
+    callPopup("updateAddress", address, title);
+
     switch (data.action) {
       case 'playing':
         console.log('data received > playing')
@@ -266,7 +264,7 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
 
   if (message.from === 'player') {
     console.log('get msg from player')
-    if(peer && peer.id) {
+    if (peer && peer.id) {
       if (conn && conn.open) {
         conn.send(message)
         respond(
@@ -285,7 +283,7 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
         console.log(e)
       })
     }
-    
+
   }
   if (message.event === 'haslogin') {
     if (peer && peer.id) {
@@ -306,9 +304,9 @@ chrome.webNavigation.onCompleted.addListener(inject, {
 
 
 window.methodExpose = {
-  getAddress: function() {
+  getAddress: function () {
     return [address, title];
   }
 }
 
-setBadge({text: "OFF", color: [240,240, 0, 255]});
+setBadge({ text: "OFF", color: [240, 240, 0, 255] });
