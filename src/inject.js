@@ -6,6 +6,7 @@
     let actionArr = [
         "pause",
         "playing",
+        "timeupdate",
     ];
 
     function loadScript(url, callback) {
@@ -49,7 +50,6 @@
         }
         return dataset[key];
     }
-
 
 
 
@@ -126,6 +126,12 @@
                 case "pause":
                     video.pause();
                     break;
+                case "timeupdate":
+                    if (message.curTime &&
+                        Math.abs(message.curTime - video.currentTime) > 1
+                    ) {
+                        video.currentTime = message.curTime;
+                    }
                 default:
                     console.log("无法处理的消息: " + message);
                     break;
