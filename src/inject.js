@@ -59,7 +59,6 @@
 
             chrome.runtime.sendMessage(
                 {
-                    greeting: "这里是inject.js",
                     from: "player",
                     action: x,
                     curTime: video.currentTime,
@@ -87,7 +86,6 @@
     function sendAddress() {
         chrome.runtime.sendMessage(
             {
-                greeting: "这里是inject.js",
                 from: "player",
                 action: "new url",
                 address: window.location.href,

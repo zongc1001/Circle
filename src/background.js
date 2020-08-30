@@ -262,9 +262,9 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
   }
 
   if (message.from === 'player') {
-    console.log('get msg from player:', message)
     if (peer && peer.id) {
       if (conn && conn.open) {
+        console.log("msg to send: ", message);
         conn.send(message)
         respond(
           { success: true, response: '已将' + message.action + '消息发出' },
