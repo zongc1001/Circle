@@ -102,17 +102,7 @@
 
 
 
-    //重写捕获video的逻辑，如果video为空应该在一段时间后再去获取
-    if (video) {
-        console.log(video);
-        console.log("video已捕获");
-        sendAddress();
-        video.addEventListener("abort", abort);
-        actionArr.forEach(x => {
-            addEventListenerToVideo(x);
-        });
-        console.log(window.location.href);
-    } 
+
 
     chrome.runtime.onMessage.addListener((message, sender, respond) => {
         console.log(message);
@@ -149,4 +139,16 @@
             });
         }
     });
+
+    //重写捕获video的逻辑，如果video为空应该在一段时间后再去获取
+    if (video) {
+        console.log(video);
+        console.log("video已捕获");
+        sendAddress();
+        video.addEventListener("abort", abort);
+        actionArr.forEach(x => {
+            addEventListenerToVideo(x);
+        });
+        console.log(window.location.href);
+    }
 })();
