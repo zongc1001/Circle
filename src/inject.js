@@ -2,10 +2,10 @@
 
     if (data("inject")) {
         console.log("脚本已存在");
-    } 
+    }
     console.log("脚本开始植入");
     data("inject", true);
-    let video = document.getElementsByTagName("video")[0];
+    let video = null;
     let actionArr = [
         "pause",
         "playing",
@@ -100,7 +100,25 @@
         );
     }
 
+    function initVideo() {
+        console.log(video);
+        console.log("video已捕获");
+        sendAddress();
+        video.addEventListener("abort", abort);
+        actionArr.forEach(x => {
+            addEventListenerToVideo(x);
+        });
+        console.log(window.location.href);
+    }
 
+    function getVideo() {
+        video = document.getElementsByTagName("video")[0];
+        if (video) {
+            initVideo();
+        } else {
+            setTimeout(getVideo, 1000);
+        }
+    }
 
 
 
@@ -143,13 +161,11 @@
 
     //重写捕获video的逻辑，如果video为空应该在一段时间后再去获取
     if (video) {
-        console.log(video);
-        console.log("video已捕获");
-        sendAddress();
-        video.addEventListener("abort", abort);
-        actionArr.forEach(x => {
-            addEventListenerToVideo(x);
-        });
-        console.log(window.location.href);
+        console.log("video 已获取");
+        initVideo();
+    } else {
+        console.log("video 未获取，将重新获取");
+        getVideo();
     }
+
 })();
