@@ -1,6 +1,8 @@
 (function () {
 
-    if (data("inject")) return;
+    if (data("inject")) {
+        console.log("脚本已存在");
+    }
     data("inject", true);
     let video = document.getElementsByTagName("video")[0];
     let actionArr = [
