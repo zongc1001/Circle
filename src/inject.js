@@ -102,7 +102,7 @@
 
     function initVideo() {
         console.log(video);
-        console.log("video已捕获");
+        console.log("开始初始化video");
         sendAddress();
         video.addEventListener("abort", abort);
         actionArr.forEach(x => {
@@ -116,6 +116,7 @@
         if (video) {
             initVideo();
         } else {
+            console.log("没有找到video，将在1秒后重新获取");
             setTimeout(getVideo, 1000);
         }
     }
