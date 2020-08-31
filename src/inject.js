@@ -111,13 +111,22 @@
         console.log(window.location.href);
     }
 
+    
+    let getVideoCount = 0;
+
     function getVideo() {
         video = document.getElementsByTagName("video")[0];
+        console.log(document);        
         if (video) {
             initVideo();
+        } else if(getVideoCount > 6) {
+            console.log("获取video对象超时");
         } else {
-            console.log("没有找到video，将在1秒后重新获取");
-            setTimeout(getVideo, 1000);
+            console.log("没有找到video，将在2秒后重新获取");
+            getVideoCount++;
+            setTimeout(function(){
+                getVideo();
+            }, 1800);
         }
     }
 
