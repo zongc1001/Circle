@@ -2,7 +2,8 @@
 
     if (data("inject")) {
         console.log("脚本已存在");
-    }
+    } 
+    console.log("脚本开始植入");
     data("inject", true);
     let video = document.getElementsByTagName("video")[0];
     let actionArr = [
