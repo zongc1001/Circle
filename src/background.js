@@ -62,7 +62,6 @@ function initPeer(resolve, reject) {
         }
         conn = c
         initConn()
-        // setBadge({ text: 'ON', color: [30, 255, 30, 255] })
 
         console.log('Connected to: ' + conn.peer)
       })
@@ -95,7 +94,7 @@ function initConn() {
   conn.on('open', function () {
     console.log("conn open");
     setBadge({ text: 'ON', color: [30, 255, 30, 255] })
-    // getPopup().methodExpose.connectSuccess();
+    callPopup("closeWindow");
     console.log('Connected to: ' + conn.peer)
   })
 
