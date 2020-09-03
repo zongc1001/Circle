@@ -1,9 +1,9 @@
 (function () {
 
     if (data("inject")) {
-        console.log("脚本已存在");
+        console.log(`脚本已存在于${document.title}`);
     }
-    console.log("脚本开始植入");
+    console.log(`脚本开始植入${document.title}`);
     data("inject", true);
     let video = null;
     let actionArr = [
@@ -11,6 +11,9 @@
         "playing",
         // "seeked",
     ];
+    let videoRefindTimes = 33;
+    let videoRefindInterval = 3;
+    let initVideoCount = 0;
 
     function loadScript(url, callback) {
         function doCallback() {
@@ -76,13 +79,9 @@
     }
 
     function abort(e) {
-        console.log(e);
+        console.log("video abort,", e);
         setTimeout(function () {
-            video = document.getElementsByTagName("video")[0];
-            actionArr.forEach(x => {
-                addEventListenerToVideo(x);
-            });
-            video.addEventListener("abort", abort);
+            initVideo(0);
         }, 1000);
     }
 
@@ -100,9 +99,9 @@
         );
     }
 
-    function initVideo() {
+    function mountVideo() {
         console.log(video);
-        console.log("开始初始化video");
+        console.log("开始挂载方法");
         sendAddress();
         video.addEventListener("abort", abort);
         actionArr.forEach(x => {
@@ -112,24 +111,24 @@
     }
 
     
-    let getVideoCount = 0;
 
-    function getVideo() {
+    function initVideo(count) {
+        initVideoCount = count;
         video = document.getElementsByTagName("video")[0];
-        console.log(document);        
         if (video) {
-            initVideo();
-        } else if(getVideoCount > 6) {
+            mountVideo();
+        } else if(initVideoCount > videoRefindTimes) {
             console.log("获取video对象超时");
         } else {
-            console.log("没有找到video，将在2秒后重新获取");
-            getVideoCount++;
+            console.log(`没有找到video，将在${videoRefindInterval}秒后重新获取`);
+            initVideoCount++;
             setTimeout(function(){
-                getVideo();
-            }, 1800);
+                initVideo(initVideoCount);
+            }, videoRefindInterval * 1000);
         }
     }
 
+    
 
 
 
@@ -172,10 +171,10 @@
     //重写捕获video的逻辑，如果video为空应该在一段时间后再去获取
     if (video) {
         console.log("video 已获取");
-        initVideo();
+        mountVideo();
     } else {
         console.log("video 未获取，将重新获取");
-        getVideo();
+        initVideo(0);
     }
 
 })();
