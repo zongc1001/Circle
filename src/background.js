@@ -71,12 +71,6 @@ function initPeer(resolve, reject) {
         setBadge({ text: 'OFF', color: [255, 30, 30, 255] })
         callPopup("setLogin", false);
         reject();
-        // if (autoReconnect) {
-        //     setTimeout(() => {
-        //         console.log("reconneting...");
-        //         peer.reconnect();
-        //     }, 1000)
-        // }
       })
 
       peer.on('close', function (err) {
