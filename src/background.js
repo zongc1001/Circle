@@ -22,7 +22,7 @@ function initPeer(resolve, reject) {
     item => {
       console.log(item)
       peer = new Peer(item.myId, {
-        host: item.server || 'zongchen.xyz',
+        host: item.server || 'zongchen.fun',
         port: 9000,
         path: '/',
         key: item.key || 'peerjs',
